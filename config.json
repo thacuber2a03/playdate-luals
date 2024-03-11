@@ -1,0 +1,24 @@
+{
+	"$schema": "https://raw.githubusercontent.com/LuaLS/LLS-Addons/main/schemas/addon_config.schema.json",
+	"name": "Playdate",
+	"words": ["playdate%.%w+"],
+	"files": ["^pdxinfo$"],
+	"settings": {
+		"Lua.runtime.special": {
+			"import": "require"
+		},
+
+		"Lua.runtime.nonstandardSymbol": [
+			"+=", "-=", "*=", "/=", "//=", "%=",
+			"<<=", ">>=", "&=", "|=", "^="
+		],
+
+		"Lua.runtime.version": "Lua 5.4",
+
+		"Lua.runtime.builtin": {
+			"basic": "default",
+			"io": "disable",
+			"os": "disable"
+		}
+	}
+}
