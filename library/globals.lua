@@ -18,9 +18,9 @@ kTextAlignment = {}
 ---@see class
 ---@class playdate.Class
 ---@field public super playdate.Class The parent of this class.
-playdate.Class = {}
+local Class = {}
 
-function playdate.Class:init(...) end
+function Class:init(...) end
 
 ---Starts the creation of a class.
 ---`.extends()` must be called right after this function.
@@ -61,8 +61,8 @@ function class(className, properties, namespace) end
 ---@see playdate.Class
 ---@see class
 ---@class playdate.ClassSpec
-playdate.ClassSpec = {}
+local ClassSpec = {}
 
 ---Specify the class to extend. Pass nothing to extend Object.
 ---@param parent? playdate.Class
-function playdate.ClassSpec.extends(parent) end
+function ClassSpec.extends(parent) end
