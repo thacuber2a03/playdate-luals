@@ -2,7 +2,8 @@
 
 This is an addon for LuaLS that helps with autocompletion for Playdate's Lua API.
 
-> **Warning**
+> **Warning**:
+>
 > Currently, this addon is handwritten, so there might be errors in the implementation
 > of certain features. Inside Playdate also doesn't explain some of its contents, such
 > as the `class` function, which means that only approximations to the behavior of said
