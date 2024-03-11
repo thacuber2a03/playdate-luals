@@ -39,23 +39,29 @@ function playdate.stop() end
 function playdate.start() end
 
 ---Called when the player chooses to exit the game via the System Menu or Menu button.
----@alias playdate.gameWillTerminate fun()
+---@type fun()
+playdate.gameWillTerminate = nil
 
 ---Called before the device goes to low-power sleep mode because of a low battery.
 ---
 ---> **Alert**
 ---> If your game saves its state, `playdate.gameWillTerminate()` and `playdate.deviceWillSleep()` are good opportunities to do it.
 ---
----@alias playdate.deviceWillSleep fun()
+---@type fun()
+playdate.deviceWillSleep = nil
 
 ---If your game is running on the Playdate when the device is locked, this function will be called. Implementing this function allows your game to take special action when the Playdate is locked, e.g., saving state.
----@alias playdate.deviceWillLock fun()
+---@type fun()
+playdate.deviceWillLock = nil
 
 ---If your game is running on the Playdate when the device is unlocked, this function will be called.
----@alias playdate.deviceDidUnlock fun()
+---@type fun()
+playdate.deviceDidUnlock = nil
 
 ---Called before the system pauses the game. (In the current version of Playdate OS, this only happens when the device’s Menu button is pushed.) Implementing these functions allows your game to take special action when it is paused, e.g., updating the menu image.
----@alias playdate.gameWillPause fun()
+---@type fun()
+playdate.gameWillPause = nil
 
 ---Called before the system resumes the game.
----@alias playdate.gameWillResume fun()
+---@type fun()
+playdate.gameWillResume = nil
