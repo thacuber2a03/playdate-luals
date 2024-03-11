@@ -12,7 +12,7 @@ This is an addon for LuaLS that helps with autocompletion for Playdate's Lua API
 > and other things will change at any time. It's not totally good for use yet, so PRs
 > would be appreciated.
 
-![showcase video](assets/showcase.webm)
+[showcase.webm](https://github.com/thacuber2a03/playdate-luals/assets/70547062/8125a249-492e-4a54-91a3-c22b88721109)
 
 ## Installation
 
