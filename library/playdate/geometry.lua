@@ -335,6 +335,13 @@ playdate.geometry.vector2D = {}
 ---@class playdate.geometry.Vector2D
 ---@field public dx number The x component of the vector.
 ---@field public dy number The y component of the vector.
+---@operator unm:playdate.geometry.Vector2D
+---@operator add(playdate.geometry.Vector2D): playdate.geometry.Vector2D
+---@operator sub(playdate.geometry.Vector2D): playdate.geometry.Vector2D
+---@operator mul(number): playdate.geometry.Vector2D
+---@operator mul(playdate.geometry.Vector2D): number
+---@operator mul(playdate.geometry.AffineTransform): playdate.geometry.Vector2D
+---@operator div(number): playdate.geometry.Vector2D
 local Vector2D = {}
 
 ---Returns a new `playdate geometry.vector2D`.
@@ -348,3 +355,64 @@ function playdate.geometry.vector2D.new(x, y) end
 ---@param angle number
 ---@return playdate.geometry.Vector2D
 function playdate.geometry.vector2D.fromPolar(length, angle) end
+
+---Returns a new copy of the vector2D.
+---@return playdate.geometry.Vector2D copy
+function Vector2D:copy() end
+
+---Returns the values `dx`, `dy`.
+---@return number dx, number dy
+function Vector2D:unpack() end
+
+---Modifies the caller by adding vector `v`.
+---@param v playdate.geometry.Vector2D
+function Vector2D:addVector(v) end
+
+---Modifies the caller, scaling it by amount `s`.
+---@param s number
+function Vector2D:scale(s) end
+
+---Returns the given vector, scaled by `s`.
+---@param s number
+---@return playdate.geometry.Vector2D scaled
+function Vector2D:scaledBy(s) end
+
+---Modifies the caller by normalizing it so that its length is 1. If the vector is (0,0), the vector is unchanged.
+function Vector2D:normalize() end
+
+---Returns a new vector by normalizing the given vector.
+---@return playdate.geometry.Vector2D norm
+function Vector2D:normalized() end
+
+---Returns the dot product of the caller and `v`.
+---@param v playdate.geometry.Vector2D
+---@return number dot
+function Vector2D:dotProduct(v) end
+
+---Returns the magnitude of the caller.
+---@return number mag
+function Vector2D:magnitude() end
+
+---Returns the square of the magnitude of the caller.
+---@return number magSq
+function Vector2D:magnitudeSquared() end
+
+---Modifies the caller by projecting it along the vector `v`.
+---@param v playdate.geometry.Vector2D
+function Vector2D:projectAlong(v) end
+
+---Returns a new vector created by projecting the given vector along the vector v.
+---@param v playdate.geometry.Vector2D
+---@return playdate.geometry.Vector2D proj
+function Vector2D:projectedAlong(v) end
+
+---Returns the angle between the caller and the vector `v`.
+---@param v playdate.geometry.Vector2D
+---@return number angle
+function Vector2D:angleBetween(v) end
+
+---Returns a vector that is the left normal of the caller.
+function Vector2D:leftNormal() end
+
+---Returns a vector that is the right normal of the caller.
+function Vector2D:rightNormal() end
