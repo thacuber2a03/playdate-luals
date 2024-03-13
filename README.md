@@ -26,12 +26,14 @@ all the settings in the [config.json](config.json) file:
 ```json
 {
     "Lua.workspace.library": [
-        "/path/to/playdate/library",
+        "/path/to/playdate",
     ],
 
     "Lua.runtime.special": {
         "import": "require"
     },
+
+    "Lua.completion.requireSeparator": "/",
 
     "Lua.runtime.nonstandardSymbol": [
         "+=", "-=", "*=", "/=", "//=", "%=",
@@ -41,9 +43,9 @@ all the settings in the [config.json](config.json) file:
     "Lua.runtime.version": "Lua 5.4",
 
     "Lua.runtime.builtin": {
-        "basic": "default",
         "io": "disable",
-        "os": "disable"
+        "os": "disable",
+        "package": "disable"
     }
 }
 ```

@@ -8,6 +8,8 @@
 			"import": "require"
 		},
 
+		"Lua.completion.requireSeparator": "/",
+
 		"Lua.runtime.nonstandardSymbol": [
 			"+=", "-=", "*=", "/=", "//=", "%=",
 			"<<=", ">>=", "&=", "|=", "^="
@@ -16,11 +18,9 @@
 		"Lua.runtime.version": "Lua 5.4",
 
 		"Lua.runtime.builtin": {
-			"basic": "default",
 			"io": "disable",
-			"os": "disable"
-		},
-
-		"Lua.completion.requireSeparator": "/"
+			"os": "disable",
+			"package": "disable"
+		}
 	}
 }
