@@ -253,6 +253,116 @@ function Arc:setIsClockwise(flag) end
 ---@return playdate.geometry.Point
 function Arc:pointOnArc(distance, extend) end
 
+---`playdate.geometry.lineSegment` implements a line segment between two points in two-dimensional space.
+---
+---You can directly read or write `x1`, `y1`, `x2`, or `y2` values to a lineSegment.
+---
+playdate.geometry.lineSegment = {}
+
+---`playdate.geometry.lineSegment` implements a line segment between two points in two-dimensional space.
+---
+---You can directly read or write `x1`, `y1`, `x2`, or `y2` values to a lineSegment.
+---
+---@class playdate.geometry.LineSegment
+local LineSegment = {}
+
+---Returns a new `playdate.geometry.lineSegment`.
+---@param x1 number
+---@param y1 number
+---@param x2 number
+---@param y2 number
+---@return playdate.geometry.LineSegment
+function playdate.geometry.lineSegment.new(x1, y1, x2, y2) end
+
+---Returns a new copy of the line segment.
+---@return playdate.geometry.LineSegment copy
+function LineSegment:copy() end
+
+---Returns the values `x1`, `y1`, `x2`, `y2`.
+---@return number x1, number y1, number x2, number y2
+function LineSegment:unpack() end
+
+---Returns the length of the line segment.
+---@return number len
+function LineSegment:length() end
+
+---Modifies the segment, offsetting its values by `dx`, `dy`.
+---@param dx number
+---@param dy number
+function LineSegment:offset(dx, dy) end
+
+---Returns a new line segment, the given segment offset by `dx`, `dy`.
+---@param dx number
+---@param dy number
+---@return playdate.geometry.LineSegment offset
+function LineSegment:offsetBy(dx, dy) end
+
+---Returns a `playdate.geometry.point` representing the mid point of the line segment.
+---@return playdate.geometry.Point mid
+---@see playdate.geometry.Point
+function LineSegment:midPoint() end
+
+---Returns a `playdate.geometry.point` on the line segment, distance pixels from the start of the line.
+---@param distance number
+---@param extend boolean If `true`, the returned point is allowed to project past the segment’s endpoints; otherwise, it is constrained to the line segment’s initial point if `distance` is negative, or the end point if `distance` is greater than the segment’s length.
+---@return playdate.geometry.Point
+---@see playdate.geometry.Point
+function LineSegment:pointOnLine(distance, extend) end
+
+---Returns a `playdate.geometry.vector2D` representation of the line segment.
+---@return playdate.geometry.Vector2D segmentVec
+---@see playdate.geometry.Vector2D
+function LineSegment:segmentVector() end
+
+---Returns a playdate.geometry.point that is the closest point to point `p` that is on the line segment.
+---@param p playdate.geometry.Point
+---@return playdate.geometry.Point closest
+---@see playdate.geometry.Point
+function LineSegment:closestPointOnLineToPoint(p) end
+
+---Returns true if there is an intersection between the caller and the line segment `ls`.
+---@param ls playdate.geometry.LineSegment
+---@return boolean doIntersect
+---@return playdate.geometry.Point? intersection If `doIntersect` is true, the point they intersect at.
+function LineSegment:intersectsLineSegment(ls) end
+
+---Returns `true` if there is an intersection between the line segments defined by (x1, y1), (x2, y2) and (x3, y3), (x4, y4).
+---
+---For use in inner loops where speed is the priority.
+---@param x1 number
+---@param y1 number
+---@param x2 number
+---@param y2 number
+---@param x3 number
+---@param y3 number
+---@param x4 number
+---@param y4 number
+---@return boolean doIntersect
+---@return number? xIntersection, number? yIntersection If `doIntersect` is true, the point they intersect at, as a pair of numbers.
+function playdate.geometry.lineSegment.fast_intersection(x1, y1, x2, y2, x3, y3, x4, y4) end
+
+---Returns the values (`intersects`, `intersectionPoints`).
+---@param poly playdate.geometry.Polygon
+---@return boolean intersects If there is at least one intersection between the caller and `poly`.
+---@return playdate.geometry.Point[] intersectionPoints an array of `playdate.geometry.point`s containing all intersection points between the caller and `poly`.
+---@see playdate.geometry.Polygon
+---@see playdate.geometry.Point
+function LineSegment:intersectsPolygon(poly) end
+
+---Returns the values (`intersects`, `intersectionPoints`).
+---@param rect playdate.geometry.Rect
+---@return boolean intersects If there is at least one intersection between the caller and `rect`.
+---@return playdate.geometry.Point[] intersectionPoints an array of `playdate.geometry.point`s containing all intersection points between the caller and `rect`.
+---@see playdate.geometry.Rect
+---@see playdate.geometry.Point
+function LineSegment:intersectsRect(rect) end
+
+---`playdate.geometry.point` implements a two-dimensional point.
+---
+---You can directly read or write the `x` and `y` values of a `point`.
+---
+playdate.geometry.point = {}
+
 ---`playdate.geometry.point` implements a two-dimensional point.
 ---
 ---You can directly read or write the `x` and `y` values of a `point`.
@@ -262,16 +372,9 @@ function Arc:pointOnArc(distance, extend) end
 ---@field public y number The y component of the point.
 ---@operator add(playdate.geometry.Vector2D): playdate.geometry.Point
 ---@operator sub(playdate.geometry.Point): playdate.geometry.Vector2D
+---@operator mul(playdate.geometry.AffineTransform): playdate.geometry.Point
+---@operator concat(playdate.geometry.Point): playdate.geometry.LineSegment
 local Point = {}
-
----@class playdate.geometry.LineSegment
-local LineSegment = {}
-
----`playdate.geometry.point` implements a two-dimensional point.
----
----You can directly read or write the `x` and `y` values of a `point`.
----
-playdate.geometry.point = {}
 
 ---Returns a new `playdate.geometry.point`.
 ---@param x number
