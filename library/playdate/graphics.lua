@@ -16,6 +16,94 @@
 ---@field public kColorXOR   playdate.graphics.Color
 playdate.graphics = {}
 
+---Pushes the current graphics state to the context stack and creates a new context.
+---
+---> **Alert**:
+---> If you draw into an image context with color set to `playdate.graphics.kColorClear`, those drawn pixels will be set to transparent. When you later draw the image into the framebuffer, those pixels will not be rendered, i.e., will act as transparent pixels in the image.
+---
+---> **Note**:
+---> `playdate.graphics.lockFocus(image)` will reroute drawing into an image, without saving the overall graphics context. 
+---
+---#### Example: Using contexts to reset drawing modifiers
+---```lua
+---local gfx = playdate.graphics
+---
+---gfx.setLineWidth(1) -- Original line width
+---gfx.setColor(gfx.kColorBlack) -- Original color
+---
+---gfx.pushContext() -- Creating a new graphics context
+---gfx.setLineWidth(5) -- Setting the line width to 5
+---gfx.setColor(gfx.kColorWhite) -- Setting the draw color to white
+---gfx.drawCircleAtPoint(200, 120, 10) -- Only thing you're trying to modify
+---gfx.popContext() -- All modifications done during the context get removed
+---
+----- Unaffected by modifiers and gets drawn with the original color/line width
+---gfx.drawLine(0, 120, 400, 120)
+---```
+---
+---@see playdate.graphics.lockFocus
+function playdate.graphics.pushContext() end
+
+---Pushes the current graphics state to the context stack and creates a new context, applying the drawing functions to the image instead of the screen buffer.
+---
+---> **Alert**:
+---> If you draw into an image context with color set to `playdate.graphics.kColorClear`, those drawn pixels will be set to transparent. When you later draw the image into the framebuffer, those pixels will not be rendered, i.e., will act as transparent pixels in the image.
+---
+---> **Note**:
+---> `playdate.graphics.lockFocus(image)` will reroute drawing into an image, without saving the overall graphics context. 
+---
+---#### Example: Using contexts to draw something to an image
+---```lua
+----- You can copy and paste this example directly as your main.lua file to see it in action
+---import "CoreLibs/graphics"
+---
+----- In this example, we'll be drawing a smiley face to an image, which saves our
+----- drawing, makes it easier to draw, and helps improve performance since we don't
+----- have to redraw each element separately each time
+---local gfx = playdate.graphics
+---
+---local smileWidth, smileHeight = 36, 36
+---local smileImage = gfx.image.new(smileWidth, smileHeight)
+----- Pushing our new image to the graphics context, so everything
+----- drawn will be drawn directly to the image
+---gfx.pushContext(smileImage)
+---    -- => Indentation not required, but helps organize things!
+---    gfx.setColor(gfx.kColorWhite)
+---    -- Coordinates are based on the image being drawn into
+---    -- (e.g. (x=0, y=0) refers to the top left of the image)
+---    gfx.fillCircleInRect(0, 0, smileWidth, smileHeight)
+---    gfx.setColor(gfx.kColorBlack)
+---    -- Drawing the eyes
+---    gfx.fillCircleAtPoint(11, 13, 3)
+---    gfx.fillCircleAtPoint(25, 13, 3)
+---    -- Drawing the mouth
+---    gfx.setLineWidth(3)
+---    gfx.drawArc(smileWidth/2, smileHeight/2, 11, 115, 245)
+---    -- Drawing the outline
+---    gfx.setLineWidth(2)
+---    gfx.setStrokeLocation(gfx.kStrokeInside)
+---    gfx.drawCircleInRect(0, 0, smileWidth, smileHeight)
+----- Popping context to stop drawing to image
+---gfx.popContext()
+---
+---function playdate.update()
+---    -- Draw smile in the center of the screen
+---    local screenWidth, screenHeight = playdate.display.getSize()
+---    smileImage:drawAnchored(screenWidth/2, screenHeight/2, 0.5, 0.5)
+---end
+---
+----- Works really well with sprites! Just set the sprite image to your new image
+---local smileSprite = gfx.sprite.new(smileImage)
+---smileSprite:add()
+---```
+---
+---@param image playdate.graphics.Image
+---@see playdate.graphics.Image
+function playdate.graphics.pushContext(image) end
+
+---Pops a graphics context off the context stack and restores its state.
+function playdate.graphics.popContext() end
+
 ---Draws the rect at (`x`, `y`) of the given `width` and `height`.
 ---@param x number
 ---@param y number
@@ -102,12 +190,70 @@ function playdate.graphics.image.new(path) end
 ---@param ditherType playdate.graphics.image.DitherType?
 function playdate.graphics.setDitherPattern(alpha, ditherType) end
 
+---`lockFocus()` routes all drawing to the given playdate.graphics.image. playdate.graphics.unlockFocus() returns drawing to the frame buffer.
+---
+---> **Alert**:
+---> If you draw into an image with color set to `playdate.graphics.kColorClear`, those drawn pixels will be set to transparent. When you later draw the image into the framebuffer, those pixels will not be rendered, i.e., will act as transparent pixels in the image.
+---
+---> **Note**:
+---> `playdate.graphics.pushContext(image)` will also allow offscreen drawing into an image, with the additional benefit of being able to save and restore the graphics state. 
+---
+---#### Example: Drawing into multiple images with `lockFocus`
+---```lua
+----- If you're drawing into multiple different images, using lockFocus might be easier (and
+----- slightly faster performance-wise) than having to repeatedly call pushContext/popContext
+---
+---local tinyCircle = gfx.image.new(10, 10)
+---local smallCircle = gfx.image.new(20, 20)
+---local mediumCircle = gfx.image.new(30, 30)
+---local largeCircle = gfx.image.new(40, 40)
+---
+---gfx.lockFocus(tinyCircle) -- draw into tinyCircle image
+----- Drawing coordinates are relative to the image, so (0, 0) is the top left of the image
+---gfx.fillCircleInRect(0, 0, tinyCircle:getSize())
+---gfx.lockFocus(smallCircle) -- draw into smallCircle image
+---gfx.fillCircleInRect(0, 0, smallCircle:getSize())
+---gfx.lockFocus(mediumCircle) -- draw into mediumCircle image
+---gfx.fillCircleInRect(0, 0, mediumCircle:getSize())
+---gfx.lockFocus(largeCircle) -- draw into largeCircle image
+---gfx.fillCircleInRect(0, 0, largeCircle:getSize())
+---gfx.unlockFocus() -- unlock focus to bring drawing back to frame buffer
+---```
+---
+---@param image playdate.graphics.Image
+function playdate.graphics.lockFocus(image) end
+
+---Reroutes drawing to the frame buffer.
+---
+---#### Example: Drawing into multiple images with `lockFocus`
+---```lua
+----- If you're drawing into multiple different images, using lockFocus might be easier (and
+----- slightly faster performance-wise) than having to repeatedly call pushContext/popContext
+---
+---local tinyCircle = gfx.image.new(10, 10)
+---local smallCircle = gfx.image.new(20, 20)
+---local mediumCircle = gfx.image.new(30, 30)
+---local largeCircle = gfx.image.new(40, 40)
+---
+---gfx.lockFocus(tinyCircle) -- draw into tinyCircle image
+----- Drawing coordinates are relative to the image, so (0, 0) is the top left of the image
+---gfx.fillCircleInRect(0, 0, tinyCircle:getSize())
+---gfx.lockFocus(smallCircle) -- draw into smallCircle image
+---gfx.fillCircleInRect(0, 0, smallCircle:getSize())
+---gfx.lockFocus(mediumCircle) -- draw into mediumCircle image
+---gfx.fillCircleInRect(0, 0, mediumCircle:getSize())
+---gfx.lockFocus(largeCircle) -- draw into largeCircle image
+---gfx.fillCircleInRect(0, 0, largeCircle:getSize())
+---gfx.unlockFocus() -- unlock focus to bring drawing back to frame buffer
+---```
+function playdate.graphics.unlockFocus() end
+
 ---Sprites are graphic objects that can be used to represent moving entities in your games, like the player, or the enemies that chase after your player. Sprites animate efficiently, and offer collision detection and a host of other built-in functionality. (If you want to create an environment for your sprites to move around in, consider using tilemaps or drawing a background image.)
 ---To have access to all the sprite functionality described below, be sure to import "CoreLibs/sprites" at the top of your source file.
 ---
 ---The simplest way to create a sprite is using sprite.new(image):
 ---
----> Creating a standalone sprite
+---#### Creating a standalone sprite
 ---```lua
 ---import "CoreLibs/sprites"
 ---
@@ -119,7 +265,7 @@ function playdate.graphics.setDitherPattern(alpha, ditherType) end
 ---
 ---If you want to use an object-oriented approach, you can also subclass sprites and create instance of those subclasses.
 ---
----> Creating a sprite subclass
+---#### Creating a sprite subclass
 ---```lua
 ---import "CoreLibs/sprites"
 ---
@@ -134,7 +280,7 @@ function playdate.graphics.setDitherPattern(alpha, ditherType) end
 ---
 ---Or with a custom initializer:
 ---
----> Creating a sprite subclass with a custom initializer
+---#### Creating a sprite subclass with a custom initializer
 ---```lua
 ---import "CoreLibs/sprites"
 ---
@@ -162,7 +308,7 @@ playdate.graphics.sprite = {}
 ---
 ---The simplest way to create a sprite is using sprite.new(image):
 ---
----> Creating a standalone sprite
+---### Creating a standalone sprite
 ---```lua
 ---import "CoreLibs/sprites"
 ---
@@ -174,7 +320,7 @@ playdate.graphics.sprite = {}
 ---
 ---If you want to use an object-oriented approach, you can also subclass sprites and create instance of those subclasses.
 ---
----> Creating a sprite subclass
+---#### Creating a sprite subclass
 ---```lua
 ---import "CoreLibs/sprites"
 ---
@@ -189,7 +335,7 @@ playdate.graphics.sprite = {}
 ---
 ---Or with a custom initializer:
 ---
----> Creating a sprite subclass with a custom initializer
+---#### Creating a sprite subclass with a custom initializer
 ---```lua
 ---import "CoreLibs/sprites"
 ---
@@ -259,7 +405,7 @@ function playdate.graphics.sprite.update() end
 ---> Some implementation details: `setBackgroundDrawingCallback()` creates a screen-sized sprite with a z-index set to the lowest possible value so it will draw behind other sprites, and adds the sprite to the display list so that it is drawn in the current scene. The background sprite ignores the `drawOffset`, and will not be automatically redrawn when the draw offset changes; use `playdate.graphics.sprite.redrawBackground()` if necessary in this case. `drawCallback` will be called from the newly-created background sprite’s `playdate.graphics.sprite:draw()` callback function and is where you should do your background drawing. This function returns the newly created `playdate.graphics.sprite`.
 ---@see playdate.graphics.sprite.redrawBackground
 ---
----_For additional background, here is the implementation of `setBackgroundDrawingCallback()` in the Playdate SDK. (This does not reflect how you should use `setBackgroundDrawingCallback()` in your game. For an example of game usage, see [A Basic Playdate Game in Lua](https://sdk.play.date/#basic-playdate-game).)_
+---For additional background, here is the implementation of `setBackgroundDrawingCallback()` in the Playdate SDK. (This does not reflect how you should use `setBackgroundDrawingCallback()` in your game. For an example of game usage, see [A Basic Playdate Game in Lua](https://sdk.play.date/#basic-playdate-game).)
 ---```lua
 ---function playdate.graphics.sprite.setBackgroundDrawingCallback(drawCallback)
 ---    local bgsprite = gfx.sprite.new()
@@ -324,7 +470,8 @@ function Sprite:moveTo(x, y) end
 function Sprite:moveBy(x, y) end
 
 ---If the sprite doesn’t have an image, the sprite’s draw function is called as needed to update the display. The rect passed in is the current dirty rect being updated by the display list. The rect coordinates passed in are relative to the sprite itself (i.e. x = 0, y = 0 refers to the top left corner of the sprite). Note that the callback is only called when the sprite is on screen and has a size specified via `sprite:setSize()` or `sprite:setBounds()`.
----> Example: Overriding the sprite draw method
+---
+---#### Example: Overriding the sprite draw method
 ---```lua
 ----- You can copy and paste this example directly as your main.lua file to see it in action
 ---import "CoreLibs/graphics"

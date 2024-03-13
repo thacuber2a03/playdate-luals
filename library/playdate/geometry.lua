@@ -4,28 +4,28 @@
 ---
 ---All new geometry objects are created with a `new()` function using syntax like:
 ---
----> Example of creating a new rect
+---#### Example of creating a new rect
 ---```lua
 ---r = playdate.geometry.rect.new(x, y, width, height)
 ---```
 ---
 ---They can be output to the Simulator console:
 ---
----> Example of printing a rect to the console
+---#### Example of printing a rect to the console
 ---```lua
 ---print('rect', r)
 ---```
 ---
 ---And tested for equality:
 ---
----> Example of testing two rects for equality
+---#### Example of testing two rects for equality
 ---```lua
 ---b = r1 == r2
 ---```
 ---
 ---Fields on most geometry objects can be set directly:
 ---
----> Example of directly setting a rect’s x coordinate
+---#### Example of directly setting a rect’s x coordinate
 ---```lua
 ---r.x = 42.0
 ---```
