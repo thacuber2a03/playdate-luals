@@ -215,15 +215,6 @@ function AffineTransform:transformedPolygon(p) end
 ---
 playdate.geometry.arc = {}
 
----@class playdate.geometry.LineSegment
-local LineSegment = {}
-
----`playdate.geometry.point` implements a two-dimensional point.
----
----You can directly read or write the `x` and `y` values of a `point`.
----
-playdate.geometry.point = {}
-
 ---`playdate.geometry.point` implements a two-dimensional point.
 ---
 ---You can directly read or write the `x` and `y` values of a `point`.
@@ -272,6 +263,15 @@ function Arc:pointOnArc(distance, extend) end
 ---@operator add(playdate.geometry.Vector2D): playdate.geometry.Point
 ---@operator sub(playdate.geometry.Point): playdate.geometry.Vector2D
 local Point = {}
+
+---@class playdate.geometry.LineSegment
+local LineSegment = {}
+
+---`playdate.geometry.point` implements a two-dimensional point.
+---
+---You can directly read or write the `x` and `y` values of a `point`.
+---
+playdate.geometry.point = {}
 
 ---Returns a new `playdate.geometry.point`.
 ---@param x number
