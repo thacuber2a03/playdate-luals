@@ -19,6 +19,8 @@
 			"basic": "default",
 			"io": "disable",
 			"os": "disable"
-		}
+		},
+
+		"Lua.completion.requireSeparator": "/"
 	}
 }

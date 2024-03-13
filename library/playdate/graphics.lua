@@ -1,5 +1,7 @@
 ---@meta
 
+---@enum playdate.graphics.Color
+
 ---The `playdate.graphics` module contains functions related to displaying information on the device screen.
 ---
 ---## Conventions
@@ -26,34 +28,52 @@ function playdate.graphics.fillRect(x, y, width, height) end
 ---@see playdate.geometry.Rect
 function playdate.graphics.fillRect(r) end
 
----@enum playdate.graphics.Color
-
 ---Sets and gets the current drawing color for primitives.
 ---
 ---`color` should be one of the constants:
----* playdate.graphics.kColorBlack
----* playdate.graphics.kColorWhite
----* playdate.graphics.kColorClear
----* playdate.graphics.kColorXOR
+---* `playdate.graphics.kColorBlack`
+---* `playdate.graphics.kColorWhite`
+---* `playdate.graphics.kColorClear`
+---* `playdate.graphics.kColorXOR`
 ---
 ---This color applies to drawing primitive shapes such as lines and rectangles, not bitmap images.
 ---
 ---> **Alert**:
----> setColor() and setPattern() / setDitherPattern() are mutually exclusive. Setting a color will overwrite a pattern, and vice versa. 
+---> `setColor()` and `setPattern()` / `setDitherPattern()` are mutually exclusive. Setting a color will overwrite a pattern, and vice versa. 
 ---@param color playdate.graphics.Color
 function playdate.graphics.setColor(color) end
 
 ---@enum playdate.graphics.image.DitherType
 
+---@enum playdate.graphics.image.FlipState
+
 ---PNG and GIF images in the source folder are compiled into a Playdate-specific format by pdc, and can be loaded into Lua with `playdate.graphics.image.new(path)`. Playdate images are 1 bit per pixel, with an optional alpha channel.
 ---@class playdate.graphics.image
----@field public kDitherTypeFloidSteinberg playdate.graphics.image.DitherType
+---@field public kDitherTypeFloydSteinberg playdate.graphics.image.DitherType
 ---@field public kDitherTypeBurkes         playdate.graphics.image.DitherType
 ---@field public kDitherTypeAtkinson       playdate.graphics.image.DitherType
+---@field public kImageUnflipped           playdate.graphics.image.FlipState
+---@field public kImageFlippedX            playdate.graphics.image.FlipState
+---@field public kImageFlippedY            playdate.graphics.image.FlipState
+---@field public kImageFlippedXY           playdate.graphics.image.FlipState
 playdate.graphics.image = {}
 
+---PNG and GIF images in the source folder are compiled into a Playdate-specific format by pdc, and can be loaded into Lua with `playdate.graphics.image.new(path)`. Playdate images are 1 bit per pixel, with an optional alpha channel.
 ---@class playdate.graphics.Image
 local Image = {} 
+
+---Draws the image with its upper-left corner at location (`x`, `y`)
+---@param x number
+---@param y number
+---@param flip playdate.graphics.image.FlipState?
+---@param sourceRect playdate.geometry.Rect?
+function Image:draw(x, y, flip, sourceRect) end
+
+---Draws the image with its upper-left corner at location `p`.
+---@param p playdate.geometry.Point
+---@param flip playdate.graphics.image.FlipState?
+---@param sourceRect playdate.geometry.Rect?
+function Image:draw(p, flip, sourceRect) end
 
 ---@class playdate.graphics.Tilemap
 local Tilemap = {}
@@ -134,10 +154,61 @@ function playdate.graphics.setDitherPattern(alpha, ditherType) end
 ---
 ---@see playdate.graphics.image
 ---@see class
----@class playdate.graphics.sprite : playdate.Class
+---@class _playdate.graphics.sprite : playdate.Class
 playdate.graphics.sprite = {}
 
----@see playdate.graphics.sprite
+---Sprites are graphic objects that can be used to represent moving entities in your games, like the player, or the enemies that chase after your player. Sprites animate efficiently, and offer collision detection and a host of other built-in functionality. (If you want to create an environment for your sprites to move around in, consider using tilemaps or drawing a background image.)
+---To have access to all the sprite functionality described below, be sure to import "CoreLibs/sprites" at the top of your source file.
+---
+---The simplest way to create a sprite is using sprite.new(image):
+---
+---> Creating a standalone sprite
+---```lua
+---import "CoreLibs/sprites"
+---
+---local image = playdate.graphics.image.new("coin")
+---local sprite = playdate.graphics.sprite.new(image)
+---sprite:moveTo(100, 100)
+---sprite:add()
+---```
+---
+---If you want to use an object-oriented approach, you can also subclass sprites and create instance of those subclasses.
+---
+---> Creating a sprite subclass
+---```lua
+---import "CoreLibs/sprites"
+---
+---class('MySprite').extends(playdate.graphics.sprite)
+---
+---local sprite = MySprite()
+---local image = playdate.graphics.image.new("coin")
+---sprite:setImage(image)
+---sprite:moveTo(100, 100)
+---sprite:add()
+---```
+---
+---Or with a custom initializer:
+---
+---> Creating a sprite subclass with a custom initializer
+---```lua
+---import "CoreLibs/sprites"
+---
+---class('MySprite').extends(playdate.graphics.sprite)
+---
+---local image = playdate.graphics.image.new("coin")
+---
+---function MySprite:init(x, y)
+---MySprite.super.init(self) -- this is critical
+---    self:setImage(image)
+---    self:moveTo(x, y)
+---end
+---
+---local sprite = MySprite(100, 100)
+---sprite:add()
+---```
+---
+---@see playdate.graphics.image
+---@see class
 ---@class playdate.graphics.Sprite
 local Sprite = {}
 
@@ -160,6 +231,44 @@ function playdate.graphics.sprite.new() end
 ---
 function playdate.graphics.sprite.update() end
 
+---> **Alert**:
+---> You must import CoreLibs/sprites to use this function.
+---
+---A convenience function for drawing a background image behind your sprites.
+---
+---`drawCallback` is a routine you specify that implements your background drawing. The callback should be a function taking the arguments `x, y, width, height`, where `x`, `y`, `width`, `height` specify the region (in screen coordinates, not world coordinates) of the background region that needs to be updated.
+---
+---> **Info**:
+---> Some implementation details: `setBackgroundDrawingCallback()` creates a screen-sized sprite with a z-index set to the lowest possible value so it will draw behind other sprites, and adds the sprite to the display list so that it is drawn in the current scene. The background sprite ignores the `drawOffset`, and will not be automatically redrawn when the draw offset changes; use `playdate.graphics.sprite.redrawBackground()` if necessary in this case. `drawCallback` will be called from the newly-created background sprite’s `playdate.graphics.sprite:draw()` callback function and is where you should do your background drawing. This function returns the newly created `playdate.graphics.sprite`.
+---@see playdate.graphics.sprite.redrawBackground
+---
+---_For additional background, here is the implementation of `setBackgroundDrawingCallback()` in the Playdate SDK. (This does not reflect how you should use `setBackgroundDrawingCallback()` in your game. For an example of game usage, see [A Basic Playdate Game in Lua](https://sdk.play.date/#basic-playdate-game).)_
+---```lua
+---function playdate.graphics.sprite.setBackgroundDrawingCallback(drawCallback)
+---    local bgsprite = gfx.sprite.new()
+---    bgsprite:setSize(playdate.display.getSize())
+---    bgsprite:setCenter(0, 0)
+---    bgsprite:moveTo(0, 0)
+---    bgsprite:setZIndex(-32768)
+---    bgsprite:setIgnoresDrawOffset(true)
+---    bgsprite:setUpdatesEnabled(false)
+---    bgsprite.draw = function(s, x, y, w, h)
+---            drawCallback(x, y, w, h)
+---    end
+---    bgsprite:add()
+---    return bgsprite
+---end
+---```
+---@param drawCallback fun(x: number, y: number, width: number, height: number)
+---@return playdate.graphics.Sprite bgsprite # The background sprite itself.
+function playdate.graphics.sprite.setBackgroundDrawingCallback(drawCallback) end
+
+---> **Alert**: You must import CoreLibs/sprites to use this function.
+---
+---Marks the background sprite dirty, forcing the drawing callback to be run when playdate.graphics.sprite.update() is called.
+---
+function playdate.graphics.sprite.redrawBackground() end
+
 ---Called by `playdate.graphics.sprite.update()` (note the syntactic difference between the period and the colon) before sprites are drawn. Implementing `:update()` gives you the opportunity to perform some code upon every frame.
 ---> **Note**:
 ---> The update method will only be called on sprites that have had `add()` called on them, and have their updates enabled.
@@ -170,7 +279,6 @@ function playdate.graphics.sprite.update() end
 function Sprite:update() end
 
 ---Adds the given sprite to the display list, so that it is drawn in the current scene.
----@param self playdate.graphics.Sprite
 function Sprite:add() end
 
 ---Sets the sprite’s drawing center as a fraction (ranging from 0.0 to 1.0) of the height and width. Default is 0.5, 0.5 (the center of the sprite). This means that when you call `:moveTo(x, y)`, the center of your sprite will be positioned at x, y. If you want x and y to represent the upper left corner of your sprite, specify the center as 0, 0.
@@ -178,7 +286,8 @@ function Sprite:add() end
 ---@param y number The y percentage of the center.
 function Sprite:setCenter(x, y) end
 
----`setBounds()` positions and sizes the sprite, used for drawing and for calculating dirty rects. upper-left-x and upper-left-y are relative to the overall display coordinate system. (If an image is attached to the sprite, the size will be defined by that image, and not by the width and height parameters passed in to `setBounds()`.)
+---`setBounds()` positions and sizes the sprite, used for drawing and for calculating dirty rects. upper-left-x and upper-left-y are relative to the overall display coordinate system.
+---(If an image is attached to the sprite, the size will be defined by that image, and not by the width and height parameters passed in to `setBounds()`.)
 ---> **Note**:
 ---> In `setBounds()`, x and y always correspond to the upper left corner of the sprite, regardless of how a sprite’s center is defined. This makes it different from sprite:moveTo(), where x and y honor the sprite’s defined center (by default, at a point 50% along the sprite’s width and height.) 
 ---@param upperLeftX number
@@ -191,6 +300,11 @@ function Sprite:setBounds(upperLeftX, upperLeftY, width, height) end
 ---@param x number
 ---@param y number
 function Sprite:moveTo(x, y) end
+
+---Moves the sprite by `x`, `y` pixels relative to its current position.
+---@param x number
+---@param y number
+function Sprite:moveBy(x, y) end
 
 ---If the sprite doesn’t have an image, the sprite’s draw function is called as needed to update the display. The rect passed in is the current dirty rect being updated by the display list. The rect coordinates passed in are relative to the sprite itself (i.e. x = 0, y = 0 refers to the top left corner of the sprite). Note that the callback is only called when the sprite is on screen and has a size specified via `sprite:setSize()` or `sprite:setBounds()`.
 ---> Example: Overriding the sprite draw method

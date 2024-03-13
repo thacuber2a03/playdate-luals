@@ -1,17 +1,35 @@
 ---@meta
 
----Version 2.4.1
+---@enum playdate.Button
+local Button = {
+    kButtonA = "a",
+    kButtonB = "b",
+    kButtonUp = "up",
+    kButtonDown = "down",
+    kButtonLeft = "left",
+    kButtonRight = "right",
+}
+
+---Version 2.4.1.
+---
 ---Official reference: https://sdk.play.date
----@class playdate
+---@class _playdate
+---@field public kButtonA     playdate.Button
+---@field public kButtonB     playdate.Button
+---@field public kButtonUp    playdate.Button
+---@field public kButtonDown  playdate.Button
+---@field public kButtonLeft  playdate.Button
+---@field public kButtonRight playdate.Button
+---@field public isSimulator boolean This variable—not a function, so don’t invoke with ()—it is set to 1 when running inside of the Simulator and is `nil` otherwise.
 playdate = {}
 
 ---Returns two values, the current API version of the Playdate runtime and the minimum API version supported by the runtime.
 ---@return number curAPI, number minAPI
 function playdate.apiVersion() end
 
----The `playdate.metadata` table contains the values in the current game’s pdxinfo file, keyed by variable name. To retrieve the version number of the game, for example, you would use `playdate.metadata.version`.
+---This table contains the values in the current game’s pdxinfo file, keyed by variable name. To retrieve the version number of the game, for example, you would use `playdate.metadata.version`.
 ---
----Changing values in this table at run time has no effect.
+---Changing values in this table at runtime has no effect.
 ---
 ---@type table<string, string>
 playdate.metadata = {}
@@ -65,3 +83,96 @@ playdate.gameWillPause = nil
 ---Called before the system resumes the game.
 ---@type fun()
 playdate.gameWillResume = nil
+
+---Returns true if `button` is currently being pressed.
+---
+---Button should be one of the constants:
+---
+---* `playdate.kButtonA`
+---* `playdate.kButtonB`
+---* `playdate.kButtonUp`
+---* `playdate.kButtonDown`
+---* `playdate.kButtonLeft`
+---* `playdate.kButtonRight`
+---
+---Or one of the strings "a", "b", "up", "down", "left", "right".
+---
+---@param button playdate.Button
+---@return boolean pressed
+function playdate.buttonIsPressed(button) end
+
+---Returns true for just one update cycle if button was pressed. `buttonJustPressed` will not return true again until the button is released and pressed again. This is useful for, say, a player "jump" action, so the jump action is taken only once and not on every single update.
+---
+---`button` should be one of the constants listed in `playdate.buttonIsPressed()`
+---
+---@param button playdate.Button
+---@return boolean justPressed
+function playdate.buttonJustPressed(button) end
+
+---Returns a table holding booleans with the following keys:
+---* `charging`: The battery is actively being charged
+---* `USB`: There is a powered USB cable connected
+---* `screws`: There is 5V being applied to the corner screws (via the dock, for example)
+---
+---@return { charging: boolean, USB: boolean, screws: boolean }
+function playdate.getPowerStatus() end
+
+---Simulator-only functionality.
+playdate.simulator = {}
+
+---
+---Writes an image to a PNG file at the path specified. Only available on the Simulator.
+---
+---> **Note**:
+---> path represents a path on your development computer, not the Playdate filesystem. It’s recommended you prefix your path with ~/ to ensure you are writing to a writeable directory, for example, ~/myImageFile.png. Please include the .png file extension in your path name. Any directories in your path must already exist on your development computer in order for the file to be written.
+---
+---@param image playdate.graphics.Image
+---@param path string
+function playdate.simulator.writeToFile(image, path) end
+
+---Quits the Playdate Simulator app.
+function playdate.simulator.exit() end
+
+---Returns the contents of the URL `url` as a string.
+---@param url string
+---@return string contents
+function playdate.simulator.getURL(url) end
+
+---Clears the simulator console.
+function playdate.clearConsole() end
+
+---Sets the color of the `playdate.debugDraw()` overlay image. Values are in the range 0-1.
+---@param r number
+---@param g number
+---@param b number
+---@param a number
+---@see playdate.debugDraw
+function playdate.setDebugDrawColor(r, g, b, a) end
+
+---Lets you act on keyboard keypresses when running in the Simulator ONLY. These can be useful for adding debugging functions that can be enabled via your keyboard.
+---
+---> **Note**:
+---> It is possible test a game on Playdate hardware and trap computer keyboard keypresses if you are using the Simulator’s Control Device with Simulator option.
+---
+---`key` is a string containing the character pressed or released on the keyboard. Note that:
+---
+---* The key in question needs to have a textual representation or these functions will not be called. For instance, alphanumeric keys will call these functions; keyboard directional arrows will not.
+---* If the keypress in question is already in use by the Simulator for another purpose (say, to control the d-pad or A/B buttons), these functions will not be called.
+---* If key is an alphabetic character, the value will always be lowercase, even if the user deliberately typed an uppercase character.
+---
+---@type fun(key: string)
+playdate.keyPressed = nil
+
+---Lets you act on keyboard key releases when running in the Simulator ONLY. These can be useful for adding debugging functions that can be enabled via your keyboard.
+---
+---@type fun(key: string)
+playdate.keyReleased = nil
+
+---Called immediately after `playdate.update()`, any drawing performed during this callback is overlaid on the display in 50% transparent red (or another color selected with `playdate.setDebugDrawColor()`).
+---
+---White pixels are drawn in the debug draw color. Black pixels are transparent.
+---
+---@see playdate.update
+---@see playdate.setDebugDrawColor
+---@type fun()
+playdate.debugDraw = nil

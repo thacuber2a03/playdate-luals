@@ -5,11 +5,19 @@
 ---> **Alert**:
 ---> You must import `CoreLibs/timer` to use these functions. It is also critical to call `playdate.timer.updateTimers()` in your `playdate.update()` function to ensure that all timers are updated every frame.
 ---
----@see playdate.frameTimer
----@class playdate.timer
+---@see playdate.FrameTimer
 playdate.timer = {}
 
----@alias playdate.timer.TimerFinishCallback fun(timer: playdate.timer|unknown, ...)
+---@class playdate.Timer
+---`playdate.timer` provides a time-based timer useful for handling animation timings, countdowns, or performing tasks after a delay. For a frame-based timer see `playdate.frameTimer`.
+---
+---> **Alert**:
+---> You must import `CoreLibs/timer` to use these functions. It is also critical to call `playdate.timer.updateTimers()` in your `playdate.update()` function to ensure that all timers are updated every frame.
+---
+---@see playdate.FrameTimer
+local Timer = {}
+
+---@alias playdate.timer.TimerFinishCallback fun(timer: playdate.Timer|unknown, ...)
 
 ---This should be called from the main `playdate.update()` loop to drive the timers.
 function playdate.timer.updateTimers() end
@@ -25,19 +33,24 @@ function playdate.timer.updateTimers() end
 ---@return playdate.Timer
 function playdate.timer.new(duration, callback, ...) end
 
----@see playdate.timer
----@class playdate.Timer
-local Timer = {}
-
 ---A frame-based timer useful for handling frame-precise animation timings. For a time-based timer see `playdate.timer` or `playdate.graphics.animation.loop`.
 ---
 ---> **Alert**:
 ---> You must import CoreLibs/frameTimer to use these functions. It is also to critical to call playdate.frameTimer.updateTimers() in your playdate.update() function to ensure that all timers are updated every frame. 
 ---
----@see playdate.timer
+---@see playdate.Timer
 ---@see playdate.graphics.animation.loop
----@class playdate.frameTimer
 playdate.frameTimer = {}
+
+---@class playdate.FrameTimer
+---A frame-based timer useful for handling frame-precise animation timings. For a time-based timer see `playdate.timer` or `playdate.graphics.animation.loop`.
+---
+---> **Alert**:
+---> You must import CoreLibs/frameTimer to use these functions. It is also to critical to call playdate.frameTimer.updateTimers() in your playdate.update() function to ensure that all timers are updated every frame. 
+---
+---@see playdate.Timer
+---@see playdate.graphics.animation.loop
+local FrameTimer = {}
 
 ---This should be called from the main playdate.update() loop to drive the timers.
 function playdate.frameTimer.updateTimers() end
@@ -53,7 +66,3 @@ function playdate.frameTimer.updateTimers() end
 ---@param ... any
 ---@return playdate.FrameTimer
 function playdate.frameTimer.new(duration, callback, ...) end
-
----@see playdate.frameTimer
----@class playdate.FrameTimer
-local FrameTimer = {}

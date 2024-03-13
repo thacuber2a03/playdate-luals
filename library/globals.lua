@@ -1,5 +1,10 @@
 ---@meta
 
+---The Playdate runtime uses `import` instead of the standard Lua `require` function, and it behaves a little differently: All files imported from main.lua (and imported from files imported from main.lua, and so on) are compiled into a single pdz file, and `import` runs the code from the file only once. A second `import` call from **anywhere** in the pdz will do nothing.
+---@param moduleName string
+---@return any
+function import(moduleName) end
+
 ---@class kTextAlignment
 ---@field public left unknown
 ---@field public center unknown
@@ -22,21 +27,20 @@ local Class = {}
 
 function Class:init(...) end
 
----Starts the creation of a class.
----`.extends()` must be called right after this function.
+---Starts the creation of a class. `.extends()` must be called right after this function.
 ---
 ---> **Warning**:
 ---> You must import `CoreLibs/object` to use this function.
 ---> Only create classes through this function.
 ---> Extend `playdate.Class` or any other class
 ---> that extends that class after you're done to have all its methods.
----> For example, to make a new class:
+---> For example, to set the type a new class:
 ---> ```lua
 ---> ---@class ClassName : playdate.Class
 ---> ClassName = {}
 ---> class("ClassName").extends()
 ---> ```
----> To make a class that extends something other than Object:
+---> To set the type of a class that extends something other than Object:
 ---> ```lua
 ---> ---@class ClassName : ParentClass
 ---> ClassName = {}

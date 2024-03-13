@@ -2,7 +2,6 @@
 
 ---The `playdate.display` module contains functions pertaining to Playdate’s screen. Functions related to drawing can be found in `playdate.graphics`.
 ---@see playdate.graphics
----@class playdate.display
 playdate.display = {}
 
 ---Sets the desired refresh rate in frames per second. The default is 30 fps, which is a recommended figure that balances animation smoothness with performance and power considerations. Maximum is 50 fps.
@@ -18,7 +17,7 @@ function playdate.display.setRefreshRate(rate) end
 ---
 ---> Equivalent to `playdate->display->getWidth()` in the C API.
 ---
----@return number width The width of the display.
+---@return number width
 ---@see playdate.display.setScale
 function playdate.display.getWidth() end
 
@@ -26,7 +25,7 @@ function playdate.display.getWidth() end
 ---
 ---> Equivalent to `playdate->display->getHeight()` in the C API.
 ---
----@return number height The height of the display.
+---@return number height
 ---@see playdate.display.setScale
 function playdate.display.getHeight() end
 
