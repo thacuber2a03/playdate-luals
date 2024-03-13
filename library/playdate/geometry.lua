@@ -34,29 +34,177 @@
 ---@see playdate.graphics
 playdate.geometry = {}
 
----You can directly read or write the `width` and `height` values of a size.
-playdate.geometry.size = {}
+---Affine transforms can be used to modify the coordinates of points, rects (as axis aligned bounding boxes (AABBs)), line segments, and polygons. The underlying matrix is of the form:
+---> The matrix of an affine transform
+---```
+---[m11 m12 tx]
+---[m21 m22 ty]
+---[ 0   0  1 ]
+---```
+---
+---You can directly read and write the `m11`, `m12`, `m21`, `m22`, `tx` and `ty` values of an `affineTransform`.
+---
+playdate.geometry.affineTransform = {}
 
----Returns a `playdate.geometry.size`.
----@param width number
----@param height number
----@return playdate.geometry.Size size
----@see playdate.geometry.Size
-function playdate.geometry.size.new(width, height) end
+---Affine transforms can be used to modify the coordinates of points, rects (as axis aligned bounding boxes (AABBs)), line segments, and polygons. The underlying matrix is of the form:
+---> The matrix of an affine transform
+---```
+---[m11 m12 tx]
+---[m21 m22 ty]
+---[ 0   0  1 ]
+---```
+---
+---You can directly read and write the `m11`, `m12`, `m21`, `m22`, `tx` and `ty` values of an `affineTransform`.
+---
+---@class playdate.geometry.AffineTransform
+---@operator mul(playdate.geometry.AffineTransform): playdate.geometry.AffineTransform
+---@operator mul(playdate.geometry.Vector2D): playdate.geometry.Vector2D
+---@operator mul(playdate.geometry.Point): playdate.geometry.Point
+local AffineTransform = {}
 
----You can directly read or write the `width` and `height` values of a size.
----@class playdate.geometry.Size
----@field public width number
----@field public height number
-local Size = {}
+---Returns a new `playdate.geometry.affineTransform`. Use `new()` instead to get a new copy of the identity transform.
+---@param m11 number
+---@param m12 number
+---@param m21 number
+---@param m22 number
+---@param tx number
+---@param ty number
+---@return playdate.geometry.AffineTransform transform
+function playdate.geometry.affineTransform.new(m11, m12, m21, m22, tx, ty) end
 
----Returns a new copy of the size.
----@return playdate.geometry.Size copy
-function Size:copy() end
+---Returns a new `playdate.geometry.affineTransform` that is the identity transform.
+---@return playdate.geometry.AffineTransform transform
+function playdate.geometry.affineTransform.new() end
 
----Returns the values `width`, `height`.
----@return number width, number height
-function Size:unpack() end
+---Returns a new copy of the affine transform.
+---@return playdate.geometry.AffineTransform copy
+function AffineTransform:copy() end
+
+---Mutates the caller so that it is an affine transformation matrix constructed by inverting itself.
+---
+---Inversion is generally used to provide reverse transformation of points within transformed objects. Given the coordinates (x, y), which have been transformed by a given matrix to new coordinates (x’, y’), transforming the coordinates (x’, y’) by the inverse matrix produces the original coordinates (x, y).
+---
+function AffineTransform:invert() end
+
+---Mutates the caller, changing it to an identity transformation matrix.
+function AffineTransform:reset() end
+
+---Mutates the the caller. The affine transform `af` is concatenated to the caller.
+---
+---Concatenation combines two affine transformation matrices by multiplying them together. You might perform several concatenations in order to create a single affine transform that contains the cumulative effects of several transformations.
+---
+---Note that matrix operations are not commutative — the order in which you concatenate matrices is important. That is, the result of multiplying matrix t1 by matrix t2 does not necessarily equal the result of multiplying matrix t2 by matrix t1.
+---
+---@param af playdate.geometry.AffineTransform
+function AffineTransform:concat(af) end
+
+---Mutates the caller by applying a translate transformation.
+---@param dx number Translation offset of the x values.
+---@param dy number Translation offset of the y values.
+function AffineTransform:translate(dx, dy) end
+
+---Returns a copy of the calling affine transform with a translate transformation appended.
+---@param dx number Translation offset of the x values.
+---@param dy number Translation offset of the y values.
+---@return playdate.geometry.AffineTransform translated
+function AffineTransform:translatedBy(dx, dy) end
+
+---Mutates the caller by applying a scaling transformation.
+---@param sx number Scale factor for the x values.
+---@param sy number? Scale factor for the y values. If omitted, defaults to `sx`.
+function AffineTransform:scale(sx, sy) end
+
+---Returns a copy of the calling affine transform with a scaling transformation appended.
+---@param sx number Scale factor for the x values.
+---@param sy number? Scale factor for the y values. If omitted, defaults to `sx`.
+---@return playdate.geometry.AffineTransform scaled
+function AffineTransform:scaledBy(sx, sy) end
+
+---Mutates the caller by applying a rotation transformation. If the optional `x` and `y` arguments are given, the transform rotates around (x,y) instead of (0,0).
+---@param angle number Value, in degrees, by which to rotate the affine transform. A positive value specifies clockwise rotation and a negative value specifies counterclockwise rotation.
+---@param x number?
+---@param y number?
+function AffineTransform:rotate(angle, x, y) end
+
+---Mutates the caller by applying a rotation transformation.
+---@param angle number Value, in degrees, by which to rotate the affine transform. A positive value specifies clockwise rotation and a negative value specifies counterclockwise rotation.
+---@param point playdate.geometry.Point If supplied, the transform is rotated around that point.
+function AffineTransform:rotate(angle, point) end
+
+---Returns a copy of the calling affine transform with a rotate transformation appended. If the optional `x` and `y` arguments are given, the transform rotates around (x,y) instead of (0,0).
+---@param angle number Value, in degrees, by which to rotate the affine transform. A positive value specifies clockwise rotation and a negative value specifies counterclockwise rotation.
+---@param x number?
+---@param y number?
+function AffineTransform:rotatedBy(angle, x, y) end
+
+---Returns a copy of the calling affine transform with a rotate transformation appended.
+---@param angle number Value, in degrees, by which to rotate the affine transform. A positive value specifies clockwise rotation and a negative value specifies counterclockwise rotation.
+---@param point playdate.geometry.Point If supplied, the transform is rotated around that point.
+function AffineTransform:rotatedBy(angle, point) end
+
+---Mutates the caller, appending a skew transformation. Values are in degrees.
+---@param sx number Angle by which to skew the x values.
+---@param sy number Angle by which to skew the y values.
+function AffineTransform:skew(sx, sy) end
+
+---Returns the given transform with a skew transformation appended. Values are in degrees.
+---@param sx number Angle by which to skew the x values.
+---@param sy number Angle by which to skew the y values.
+---@return playdate.geometry.AffineTransform skewed
+function AffineTransform:skewedBy(sx, sy) end
+
+---Modifies the point `p` by applying the affine transform.
+---@param p playdate.geometry.Point
+---@see playdate.geometry.Point
+function AffineTransform:transformPoint(p) end
+
+---Returns a copy of point `p` with the affine transformation applied.
+---@param p playdate.geometry.Point
+---@return playdate.geometry.Point transformed
+---@see playdate.geometry.Point
+function AffineTransform:transformedPoint(p) end
+
+---Returns two values calculated by applying the affine transform to the point (x, y).
+---@param x number
+---@param y number
+---@return number transformedX, number transformedY
+function AffineTransform:transformXY(x, y) end
+
+---Modifies the line segment `ls` by applying the affine transform.
+---@param ls playdate.geometry.LineSegment
+---@see playdate.geometry.LineSegment
+function AffineTransform:transformLineSegment(ls) end
+
+---Returns a copy of line segment `ls` with the affine transformation applied.
+---@param ls playdate.geometry.LineSegment
+---@return playdate.geometry.LineSegment transformed
+---@see playdate.geometry.LineSegment
+function AffineTransform:transformedLineSegment(ls) end
+
+---Modifies the axis aligned bounding box r (a rect) by applying the affine transform.
+---@param r playdate.geometry.Rect
+---@see playdate.geometry.Rect
+function AffineTransform:transformAABB(r) end
+
+---Returns a copy of rect `r` with the affine transformation applied.
+---@param r playdate.geometry.Rect
+---@return playdate.geometry.Rect transformed
+---@see playdate.geometry.Rect
+function AffineTransform:transformedAABB(r) end
+
+---Modifies the polygon `p` by applying the affine transform.
+---@param p playdate.geometry.Polygon
+---@see playdate.geometry.Polygon
+function AffineTransform:transformPolygon(p) end
+
+---Returns a copy of polygon `p` with the affine transformation applied.
+---@param p playdate.geometry.Polygon
+---@return playdate.geometry.Polygon transformed
+---@see playdate.geometry.Polygon
+function AffineTransform:transformedPolygon(p) end
+
+---@class playdate.geometry.LineSegment
+local LineSegment = {}
 
 ---`playdate.geometry.point` implements a two-dimensional point.
 ---
@@ -111,6 +259,9 @@ function Point:squaredDistanceToPoint(p) end
 ---@return number
 function Point:distanceToPoint(p) end
 
+---@class playdate.geometry.Polygon
+local Polygon = {}
+
 ---playdate.geometry.rect implements a rectangle.
 ---
 ---You can directly read or write `x`, `y`, `width`, or `height` values to a rect.
@@ -145,6 +296,31 @@ local Rect = {}
 ---@param height number
 ---@return playdate.geometry.Rect
 function playdate.geometry.rect.new(x, y, width, height) end
+
+---You can directly read or write the `width` and `height` values of a size.
+playdate.geometry.size = {}
+
+---Returns a `playdate.geometry.size`.
+---@param width number
+---@param height number
+---@return playdate.geometry.Size size
+---@see playdate.geometry.Size
+function playdate.geometry.size.new(width, height) end
+
+---You can directly read or write the `width` and `height` values of a size.
+---@class playdate.geometry.Size
+---@field public width number
+---@field public height number
+local Size = {}
+
+---Returns a new copy of the size.
+---@return playdate.geometry.Size copy
+function Size:copy() end
+
+---Returns the values `width`, `height`.
+---@return number width, number height
+function Size:unpack() end
+
 
 ---playdate.geometry.vector2D implements a two-dimensional vector.
 ---
