@@ -212,17 +212,34 @@ playdate.graphics.sprite = {}
 ---@class playdate.graphics.Sprite
 local Sprite = {}
 
----This class method (note the "." syntax rather than ":") returns a new sprite object. A previously-loaded image or tilemap object can be optionally passed-in.
+---This class method (note the "." syntax rather than ":") returns a new sprite object.
 ---
 ---> **Alert**:
 ---> To see your sprite onscreen, you will need to call :add() on your sprite to add it to the display list. 
 ---
 ---@return playdate.graphics.Sprite
----@overload fun(image: playdate.graphics.Image): playdate.graphics.Sprite
----@overload fun(tilemap: playdate.graphics.Tilemap): playdate.graphics.Sprite
 function playdate.graphics.sprite.new() end
 
+---This class method (note the "." syntax rather than ":") returns a new sprite object from a previously loaded image.
+---
+---> **Alert**:
+---> To see your sprite onscreen, you will need to call :add() on your sprite to add it to the display list. 
+---
+---@param image playdate.graphics.Image
+---@return playdate.graphics.Sprite sprite
+function playdate.graphics.sprite.new(image) end
+
+---This class method (note the "." syntax rather than ":") returns a new sprite object from a previously loaded tilemap.
+---
+---> **Alert**:
+---> To see your sprite onscreen, you will need to call :add() on your sprite to add it to the display list. 
+---
+---@param tilemap playdate.graphics.Tilemap
+---@return playdate.graphics.Sprite sprite
+function playdate.graphics.sprite.new(tilemap) end
+
 --- This class method (note the "." syntax rather than ":") calls the `update()` function on every sprite in the global sprite list and redraws all of the dirty rects.
+---
 ---> **Alert**:
 ---> You will generally want to call playdate.graphics.sprite.update() once in your playdate.update() method, to ensure that your sprites are updated and drawn during every frame. Failure to do so may mean your sprites will not appear onscreen.
 ---
