@@ -57,6 +57,12 @@ playdate.geometry.affineTransform = {}
 ---You can directly read and write the `m11`, `m12`, `m21`, `m22`, `tx` and `ty` values of an `affineTransform`.
 ---
 ---@class playdate.geometry.AffineTransform
+---@field public m11 number
+---@field public m12 number
+---@field public m21 number
+---@field public m22 number
+---@field public tx number
+---@field public ty number
 ---@operator mul(playdate.geometry.AffineTransform): playdate.geometry.AffineTransform
 ---@operator mul(playdate.geometry.Vector2D): playdate.geometry.Vector2D
 ---@operator mul(playdate.geometry.Point): playdate.geometry.Point
@@ -203,6 +209,12 @@ function AffineTransform:transformPolygon(p) end
 ---@see playdate.geometry.Polygon
 function AffineTransform:transformedPolygon(p) end
 
+---`playdate.geometry.arc` implements an arc.
+---
+---You can directly read or write the `x`,`y`, `radius`, `startAngle`, `endAngle` and `clockwise` values of an arc.
+---
+playdate.geometry.arc = {}
+
 ---@class playdate.geometry.LineSegment
 local LineSegment = {}
 
@@ -211,6 +223,44 @@ local LineSegment = {}
 ---You can directly read or write the `x` and `y` values of a `point`.
 ---
 playdate.geometry.point = {}
+
+---`playdate.geometry.point` implements a two-dimensional point.
+---
+---You can directly read or write the `x` and `y` values of a `point`.
+---
+---@class playdate.geometry.Arc
+local Arc = {}
+
+---Returns a new `playdate.geometry.arc`.
+---@param x number
+---@param y number
+---@param startAngle number
+---@param endAngle number
+---@param direction boolean True for clockwise, false for clockwise. If not specified, gets inferred from the start and end angles.
+---@return playdate.geometry.Arc
+function playdate.geometry.arc.new(x, y, radius, startAngle, endAngle, direction) end
+
+---Returns a new copy of the arc.
+---@return playdate.geometry.Arc copy
+function Arc:copy() end
+
+---Returns the length of the arc.
+---@return number len
+function Arc:length() end
+
+---Returns true if the direction of the arc is clockwise.
+---@return boolean dir
+function Arc:isClockwise() end
+
+---Sets the direction of the arc.
+---@param flag boolean `true` for clockwise, `false` for counterclockwise.
+function Arc:setIsClockwise(flag) end
+
+---Returns a new point on the arc, `distance` pixels from the arc’s start angle.
+---@param distance number
+---@param extend boolean If `true`, the point is allowed to project past the arc's endpoints, otherwise it gets constrained to the initial point if `distance` is negative, or the end point if `distance` is greater than the arc's length.
+---@return playdate.geometry.Point
+function Arc:pointOnArc(distance, extend) end
 
 ---`playdate.geometry.point` implements a two-dimensional point.
 ---
