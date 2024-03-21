@@ -31,6 +31,7 @@ function playdate.timer.updateTimers() end
 ---@param callback playdate.timer.TimerFinishCallback
 ---@param ... any
 ---@return playdate.Timer
+---@nodiscard
 function playdate.timer.new(duration, callback, ...) end
 
 ---A frame-based timer useful for handling frame-precise animation timings. For a time-based timer see `playdate.timer` or `playdate.graphics.animation.loop`.
@@ -65,4 +66,5 @@ function playdate.frameTimer.updateTimers() end
 ---@param callback playdate.timer.TimerFinishCallback
 ---@param ... any
 ---@return playdate.FrameTimer
+---@nodiscard
 function playdate.frameTimer.new(duration, callback, ...) end

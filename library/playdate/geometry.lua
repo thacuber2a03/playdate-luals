@@ -76,14 +76,17 @@ local AffineTransform = {}
 ---@param tx number
 ---@param ty number
 ---@return playdate.geometry.AffineTransform transform
+---@nodiscard
 function playdate.geometry.affineTransform.new(m11, m12, m21, m22, tx, ty) end
 
 ---Returns a new `playdate.geometry.affineTransform` that is the identity transform.
 ---@return playdate.geometry.AffineTransform transform
+---@nodiscard
 function playdate.geometry.affineTransform.new() end
 
 ---Returns a new copy of the affine transform.
 ---@return playdate.geometry.AffineTransform copy
+---@nodiscard
 function AffineTransform:copy() end
 
 ---Mutates the caller so that it is an affine transformation matrix constructed by inverting itself.
@@ -113,6 +116,7 @@ function AffineTransform:translate(dx, dy) end
 ---@param dx number Translation offset of the x values.
 ---@param dy number Translation offset of the y values.
 ---@return playdate.geometry.AffineTransform translated
+---@nodiscard
 function AffineTransform:translatedBy(dx, dy) end
 
 ---Mutates the caller by applying a scaling transformation.
@@ -124,6 +128,7 @@ function AffineTransform:scale(sx, sy) end
 ---@param sx number Scale factor for the x values.
 ---@param sy number? Scale factor for the y values. If omitted, defaults to `sx`.
 ---@return playdate.geometry.AffineTransform scaled
+---@nodiscard
 function AffineTransform:scaledBy(sx, sy) end
 
 ---Mutates the caller by applying a rotation transformation. If the optional `x` and `y` arguments are given, the transform rotates around (x,y) instead of (0,0).
@@ -157,6 +162,7 @@ function AffineTransform:skew(sx, sy) end
 ---@param sx number Angle by which to skew the x values.
 ---@param sy number Angle by which to skew the y values.
 ---@return playdate.geometry.AffineTransform skewed
+---@nodiscard
 function AffineTransform:skewedBy(sx, sy) end
 
 ---Modifies the point `p` by applying the affine transform.
@@ -168,12 +174,14 @@ function AffineTransform:transformPoint(p) end
 ---@param p playdate.geometry.Point
 ---@return playdate.geometry.Point transformed
 ---@see playdate.geometry.Point
+---@nodiscard
 function AffineTransform:transformedPoint(p) end
 
 ---Returns two values calculated by applying the affine transform to the point (x, y).
 ---@param x number
 ---@param y number
 ---@return number transformedX, number transformedY
+---@nodiscard
 function AffineTransform:transformXY(x, y) end
 
 ---Modifies the line segment `ls` by applying the affine transform.
@@ -185,6 +193,7 @@ function AffineTransform:transformLineSegment(ls) end
 ---@param ls playdate.geometry.LineSegment
 ---@return playdate.geometry.LineSegment transformed
 ---@see playdate.geometry.LineSegment
+---@nodiscard
 function AffineTransform:transformedLineSegment(ls) end
 
 ---Modifies the axis aligned bounding box r (a rect) by applying the affine transform.
@@ -196,6 +205,7 @@ function AffineTransform:transformAABB(r) end
 ---@param r playdate.geometry.Rect
 ---@return playdate.geometry.Rect transformed
 ---@see playdate.geometry.Rect
+---@nodiscard
 function AffineTransform:transformedAABB(r) end
 
 ---Modifies the polygon `p` by applying the affine transform.
@@ -207,6 +217,7 @@ function AffineTransform:transformPolygon(p) end
 ---@param p playdate.geometry.Polygon
 ---@return playdate.geometry.Polygon transformed
 ---@see playdate.geometry.Polygon
+---@nodiscard
 function AffineTransform:transformedPolygon(p) end
 
 ---`playdate.geometry.arc` implements an arc.
@@ -229,18 +240,22 @@ local Arc = {}
 ---@param endAngle number
 ---@param direction boolean True for clockwise, false for clockwise. If not specified, gets inferred from the start and end angles.
 ---@return playdate.geometry.Arc
+---@nodiscard
 function playdate.geometry.arc.new(x, y, radius, startAngle, endAngle, direction) end
 
 ---Returns a new copy of the arc.
 ---@return playdate.geometry.Arc copy
+---@nodiscard
 function Arc:copy() end
 
 ---Returns the length of the arc.
 ---@return number len
+---@nodiscard
 function Arc:length() end
 
 ---Returns true if the direction of the arc is clockwise.
 ---@return boolean dir
+---@nodiscard
 function Arc:isClockwise() end
 
 ---Sets the direction of the arc.
@@ -251,6 +266,7 @@ function Arc:setIsClockwise(flag) end
 ---@param distance number
 ---@param extend boolean If `true`, the point is allowed to project past the arc's endpoints, otherwise it gets constrained to the initial point if `distance` is negative, or the end point if `distance` is greater than the arc's length.
 ---@return playdate.geometry.Point
+---@nodiscard
 function Arc:pointOnArc(distance, extend) end
 
 ---`playdate.geometry.lineSegment` implements a line segment between two points in two-dimensional space.
@@ -272,18 +288,22 @@ local LineSegment = {}
 ---@param x2 number
 ---@param y2 number
 ---@return playdate.geometry.LineSegment
+---@nodiscard
 function playdate.geometry.lineSegment.new(x1, y1, x2, y2) end
 
 ---Returns a new copy of the line segment.
 ---@return playdate.geometry.LineSegment copy
+---@nodiscard
 function LineSegment:copy() end
 
 ---Returns the values `x1`, `y1`, `x2`, `y2`.
 ---@return number x1, number y1, number x2, number y2
+---@nodiscard
 function LineSegment:unpack() end
 
 ---Returns the length of the line segment.
 ---@return number len
+---@nodiscard
 function LineSegment:length() end
 
 ---Modifies the segment, offsetting its values by `dx`, `dy`.
@@ -295,11 +315,13 @@ function LineSegment:offset(dx, dy) end
 ---@param dx number
 ---@param dy number
 ---@return playdate.geometry.LineSegment offset
+---@nodiscard
 function LineSegment:offsetBy(dx, dy) end
 
 ---Returns a `playdate.geometry.point` representing the mid point of the line segment.
 ---@return playdate.geometry.Point mid
 ---@see playdate.geometry.Point
+---@nodiscard
 function LineSegment:midPoint() end
 
 ---Returns a `playdate.geometry.point` on the line segment, distance pixels from the start of the line.
@@ -307,23 +329,27 @@ function LineSegment:midPoint() end
 ---@param extend boolean If `true`, the returned point is allowed to project past the segment’s endpoints; otherwise, it is constrained to the line segment’s initial point if `distance` is negative, or the end point if `distance` is greater than the segment’s length.
 ---@return playdate.geometry.Point
 ---@see playdate.geometry.Point
+---@nodiscard
 function LineSegment:pointOnLine(distance, extend) end
 
 ---Returns a `playdate.geometry.vector2D` representation of the line segment.
 ---@return playdate.geometry.Vector2D segmentVec
 ---@see playdate.geometry.Vector2D
+---@nodiscard
 function LineSegment:segmentVector() end
 
 ---Returns a playdate.geometry.point that is the closest point to point `p` that is on the line segment.
 ---@param p playdate.geometry.Point
 ---@return playdate.geometry.Point closest
 ---@see playdate.geometry.Point
+---@nodiscard
 function LineSegment:closestPointOnLineToPoint(p) end
 
 ---Returns true if there is an intersection between the caller and the line segment `ls`.
 ---@param ls playdate.geometry.LineSegment
 ---@return boolean doIntersect
 ---@return playdate.geometry.Point? intersection If `doIntersect` is true, the point they intersect at.
+---@nodiscard
 function LineSegment:intersectsLineSegment(ls) end
 
 ---Returns `true` if there is an intersection between the line segments defined by (x1, y1), (x2, y2) and (x3, y3), (x4, y4).
@@ -339,6 +365,7 @@ function LineSegment:intersectsLineSegment(ls) end
 ---@param y4 number
 ---@return boolean doIntersect
 ---@return number? xIntersection, number? yIntersection If `doIntersect` is true, the point they intersect at, as a pair of numbers.
+---@nodiscard
 function playdate.geometry.lineSegment.fast_intersection(x1, y1, x2, y2, x3, y3, x4, y4) end
 
 ---Returns the values (`intersects`, `intersectionPoints`).
@@ -347,6 +374,7 @@ function playdate.geometry.lineSegment.fast_intersection(x1, y1, x2, y2, x3, y3,
 ---@return playdate.geometry.Point[] intersectionPoints an array of `playdate.geometry.point`s containing all intersection points between the caller and `poly`.
 ---@see playdate.geometry.Polygon
 ---@see playdate.geometry.Point
+---@nodiscard
 function LineSegment:intersectsPolygon(poly) end
 
 ---Returns the values (`intersects`, `intersectionPoints`).
@@ -355,6 +383,7 @@ function LineSegment:intersectsPolygon(poly) end
 ---@return playdate.geometry.Point[] intersectionPoints an array of `playdate.geometry.point`s containing all intersection points between the caller and `rect`.
 ---@see playdate.geometry.Rect
 ---@see playdate.geometry.Point
+---@nodiscard
 function LineSegment:intersectsRect(rect) end
 
 ---`playdate.geometry.point` implements a two-dimensional point.
@@ -381,14 +410,17 @@ local Point = {}
 ---@param y number
 ---@return playdate.geometry.Point
 ---@see playdate.geometry.Point
+---@nodiscard
 function playdate.geometry.point.new(x, y) end
 
 ---Returns a new copy of the point.
 ---@return playdate.geometry.Point copy
+---@nodiscard
 function Point:copy() end
 
 ---Returns the values `x`, `y`.
 ---@return number x, number y
+---@nodiscard
 function Point:unpack() end
 
 ---Modifies the point, offsetting its values by `dx`, `dy`.
@@ -400,16 +432,19 @@ function Point:offset(dx, dy) end
 ---@param dx number
 ---@param dy number
 ---@return playdate.geometry.Point
+---@nodiscard
 function Point:offsetBy(dx, dy) end
 
 ---Returns the square of the distance to point `p`.
 ---@param p playdate.geometry.Point
 ---@return number
+---@nodiscard
 function Point:squaredDistanceToPoint(p) end
 
 ---Returns the distance to point `p`.
 ---@param p playdate.geometry.Point
 ---@return number
+---@nodiscard
 function Point:distanceToPoint(p) end
 
 ---@class playdate.geometry.Polygon
@@ -448,6 +483,7 @@ local Rect = {}
 ---@param width number
 ---@param height number
 ---@return playdate.geometry.Rect
+---@nodiscard
 function playdate.geometry.rect.new(x, y, width, height) end
 
 ---You can directly read or write the `width` and `height` values of a size.
@@ -458,6 +494,7 @@ playdate.geometry.size = {}
 ---@param height number
 ---@return playdate.geometry.Size size
 ---@see playdate.geometry.Size
+---@nodiscard
 function playdate.geometry.size.new(width, height) end
 
 ---You can directly read or write the `width` and `height` values of a size.
@@ -468,10 +505,12 @@ local Size = {}
 
 ---Returns a new copy of the size.
 ---@return playdate.geometry.Size copy
+---@nodiscard
 function Size:copy() end
 
 ---Returns the values `width`, `height`.
 ---@return number width, number height
+---@nodiscard
 function Size:unpack() end
 
 
@@ -501,20 +540,24 @@ local Vector2D = {}
 ---@param x number
 ---@param y number
 ---@return playdate.geometry.Vector2D
+---@nodiscard
 function playdate.geometry.vector2D.new(x, y) end
 
 ---Returns a new `playdate.geometry.vector2D`. Angles should be specified in degrees. Zero degrees represents the top of the circle.
 ---@param length number
 ---@param angle number
 ---@return playdate.geometry.Vector2D
+---@nodiscard
 function playdate.geometry.vector2D.fromPolar(length, angle) end
 
 ---Returns a new copy of the vector2D.
 ---@return playdate.geometry.Vector2D copy
+---@nodiscard
 function Vector2D:copy() end
 
 ---Returns the values `dx`, `dy`.
 ---@return number dx, number dy
+---@nodiscard
 function Vector2D:unpack() end
 
 ---Modifies the caller by adding vector `v`.
@@ -528,6 +571,7 @@ function Vector2D:scale(s) end
 ---Returns the given vector, scaled by `s`.
 ---@param s number
 ---@return playdate.geometry.Vector2D scaled
+---@nodiscard
 function Vector2D:scaledBy(s) end
 
 ---Modifies the caller by normalizing it so that its length is 1. If the vector is (0,0), the vector is unchanged.
@@ -535,19 +579,23 @@ function Vector2D:normalize() end
 
 ---Returns a new vector by normalizing the given vector.
 ---@return playdate.geometry.Vector2D norm
+---@nodiscard
 function Vector2D:normalized() end
 
 ---Returns the dot product of the caller and `v`.
 ---@param v playdate.geometry.Vector2D
 ---@return number dot
+---@nodiscard
 function Vector2D:dotProduct(v) end
 
 ---Returns the magnitude of the caller.
 ---@return number mag
+---@nodiscard
 function Vector2D:magnitude() end
 
 ---Returns the square of the magnitude of the caller.
 ---@return number magSq
+---@nodiscard
 function Vector2D:magnitudeSquared() end
 
 ---Modifies the caller by projecting it along the vector `v`.
@@ -557,11 +605,13 @@ function Vector2D:projectAlong(v) end
 ---Returns a new vector created by projecting the given vector along the vector v.
 ---@param v playdate.geometry.Vector2D
 ---@return playdate.geometry.Vector2D proj
+---@nodiscard
 function Vector2D:projectedAlong(v) end
 
 ---Returns the angle between the caller and the vector `v`.
 ---@param v playdate.geometry.Vector2D
 ---@return number angle
+---@nodiscard
 function Vector2D:angleBetween(v) end
 
 ---Returns a vector that is the left normal of the caller.

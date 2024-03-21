@@ -5,6 +5,18 @@
 ---@return any
 function import(moduleName) end
 
+---This function does not exist in the Playdate's API.
+---@deprecated
+function load(chunk, chunkname, mode, env) end
+
+---This function does not exist in the Playdate's API.
+---@deprecated
+function loadfile(filename, mode, env) end
+
+---This function does not exist in the Playdate's API.
+---@deprecated
+function loadstring(text, chunkname) end
+
 ---@class kTextAlignment
 ---@field public left unknown
 ---@field public center unknown
@@ -25,7 +37,13 @@ kTextAlignment = {}
 ---@field public super playdate.Class The parent of this class.
 local Class = {}
 
-function Class:init(...) end
+---Callback to initialize a class once it has been instanciated.
+---
+---> **Warning**:
+---> Only extend `playdate.Class` if you're making a class using `class`.
+---
+---@type fun(self: playdate.Class, ...)
+Class.init = nil
 
 ---Starts the creation of a class. `.extends()` must be called right after this function.
 ---
@@ -68,5 +86,5 @@ function class(className, properties, namespace) end
 local ClassSpec = {}
 
 ---Specify the class to extend. Pass nothing to extend Object.
----@param parent? playdate.Class
+---@param parent playdate.Class?
 function ClassSpec.extends(parent) end

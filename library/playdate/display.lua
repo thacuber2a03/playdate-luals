@@ -19,6 +19,7 @@ function playdate.display.setRefreshRate(rate) end
 ---
 ---@return number width
 ---@see playdate.display.setScale
+---@nodiscard
 function playdate.display.getWidth() end
 
 ---Returns the height of the Playdate display, taking the current display scale into account; e.g., if the scale is 2, the values returned will be based off of a 200 x 120-pixel screen rather than the native 400 x 240. (See `playdate.display.setScale()`.)
@@ -27,6 +28,7 @@ function playdate.display.getWidth() end
 ---
 ---@return number height
 ---@see playdate.display.setScale
+---@nodiscard
 function playdate.display.getHeight() end
 
 ---Sets the display scale factor. Valid values for scale are 1, 2, 4, and 8.
@@ -35,5 +37,10 @@ function playdate.display.getHeight() end
 ---
 ---> Equivalent to playdate->display->setScale() in the C API.
 ---
----@param scale 1 | 2 | 4 | 8 # The scale factor.
+---@param scale 1 | 2 | 4 | 8
 function playdate.display.setScale(scale) end
+
+---Gets the display scale factor. Valid values for scale are 1, 2, 4, and 8.
+---
+---@return 1 | 2 | 4 | 8 scale
+function playdate.display.getScale() end

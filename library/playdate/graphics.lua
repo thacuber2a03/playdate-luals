@@ -172,11 +172,13 @@ local Tilemap = {}
 ---@param bgColor playdate.graphics.Color?
 ---@return playdate.graphics.Image
 ---@see playdate.graphics.setColor
+---@nodiscard
 function playdate.graphics.image.new(width, height, bgColor) end
 
 ---Returns a `playdate.graphics.image` object from the data at `path`. If there is no file at `path`, the function returns nil and a second value describing the error.
 ---@param path string
 ---@return playdate.graphics.Image? image, string error
+---@nodiscard
 function playdate.graphics.image.new(path) end
 
 ---Sets the pattern used for drawing to a dithered pattern. If the current drawing color is white, the pattern is white pixels on a transparent background and (due to a bug) the alpha value is inverted: 1.0 is transparent and 0 is opaque. Otherwise, the pattern is black pixels on a transparent background and alpha 0 is transparent while 1.0 is opaque.
@@ -364,6 +366,7 @@ local Sprite = {}
 ---> To see your sprite onscreen, you will need to call :add() on your sprite to add it to the display list. 
 ---
 ---@return playdate.graphics.Sprite
+---@nodiscard
 function playdate.graphics.sprite.new() end
 
 ---This class method (note the "." syntax rather than ":") returns a new sprite object from a previously loaded image.
@@ -373,6 +376,7 @@ function playdate.graphics.sprite.new() end
 ---
 ---@param image playdate.graphics.Image
 ---@return playdate.graphics.Sprite sprite
+---@nodiscard
 function playdate.graphics.sprite.new(image) end
 
 ---This class method (note the "." syntax rather than ":") returns a new sprite object from a previously loaded tilemap.
@@ -382,6 +386,7 @@ function playdate.graphics.sprite.new(image) end
 ---
 ---@param tilemap playdate.graphics.Tilemap
 ---@return playdate.graphics.Sprite sprite
+---@nodiscard
 function playdate.graphics.sprite.new(tilemap) end
 
 --- This class method (note the "." syntax rather than ":") calls the `update()` function on every sprite in the global sprite list and redraws all of the dirty rects.

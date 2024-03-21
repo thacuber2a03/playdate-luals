@@ -25,6 +25,7 @@ playdate = {}
 
 ---Returns two values, the current API version of the Playdate runtime and the minimum API version supported by the runtime.
 ---@return number curAPI, number minAPI
+---@nodiscard
 function playdate.apiVersion() end
 
 ---This table contains the values in the current game’s pdxinfo file, keyed by variable name. To retrieve the version number of the game, for example, you would use `playdate.metadata.version`.
@@ -99,6 +100,8 @@ playdate.gameWillResume = nil
 ---
 ---@param button playdate.Button
 ---@return boolean pressed
+---@see playdate.buttonJustPressed
+---@nodiscard
 function playdate.buttonIsPressed(button) end
 
 ---Returns true for just one update cycle if button was pressed. `buttonJustPressed` will not return true again until the button is released and pressed again. This is useful for, say, a player "jump" action, so the jump action is taken only once and not on every single update.
@@ -107,6 +110,8 @@ function playdate.buttonIsPressed(button) end
 ---
 ---@param button playdate.Button
 ---@return boolean justPressed
+---@see playdate.buttonIsPressed
+---@nodiscard
 function playdate.buttonJustPressed(button) end
 
 ---Returns a table holding booleans with the following keys:
@@ -115,6 +120,7 @@ function playdate.buttonJustPressed(button) end
 ---* `screws`: There is 5V being applied to the corner screws (via the dock, for example)
 ---
 ---@return { charging: boolean, USB: boolean, screws: boolean }
+---@nodiscard
 function playdate.getPowerStatus() end
 
 ---Simulator-only functionality.
@@ -136,6 +142,7 @@ function playdate.simulator.exit() end
 ---Returns the contents of the URL `url` as a string.
 ---@param url string
 ---@return string contents
+---@nodiscard
 function playdate.simulator.getURL(url) end
 
 ---Clears the simulator console.

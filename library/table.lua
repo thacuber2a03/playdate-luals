@@ -6,11 +6,13 @@
 ---@param table table
 ---@param element any
 ---@return integer? index
+---@nodiscard
 function table.indexOfElement(table, element) end
 
 ---Returns the size of the given table as multiple values (`arrayCount`, `hashCount`)
 ---@param table table
 ---@return integer arrayCount, integer hashCount
+---@nodiscard
 function table.getsize(table) end
 
 ---Returns a new Lua table with the array and hash parts preallocated to accommodate `arrayCount` and `hashCount` elements respectively.
@@ -20,15 +22,18 @@ function table.getsize(table) end
 ---@param arrayCount integer
 ---@param hashCount integer
 ---@return table
+---@nodiscard
 function table.create(arrayCount, hashCount) end
 
 ---`shallowcopy` returns a shallow copy of the `source` table. If a `destination` table is provided, it copies the contents of `source` into `destination` and returns `destination`. The copy will contain references to any nested tables.
 ---@param source table
 ---@param destination table?
 ---@return table copy `destination` if it exists, otherwise a new table
+---@nodiscard
 function table.shallowcopy(source, destination) end
 
 ---`deepcopy` returns a deepcopy of the `source` table. The copy will contain copies of any nested tables.
 ---@param source table
 ---@return table copy
+---@nodiscard
 function table.deepcopy(source) end

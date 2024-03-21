@@ -5,6 +5,7 @@ playdate.sound = {}
 
 ---Returns the sample rate of the audio system (44100). The sample rate is determined by the hardware, and is not currently mutable.
 ---@return integer sampleRate
+---@nodiscard
 function playdate.sound.getSampleRate() end
 
 ---The sampleplayer class is used for playing short samples like sound effects. Audio data is loaded into memory at instantiation, so it plays with little overhead. For longer audio like background music, the fileplayer class may be more appropriate; there, audio data is streamed from disk as it’s played and only a small portion of the data is in memory at any given time.
@@ -14,11 +15,13 @@ playdate.sound.sampleplayer = {}
 ---Returns a new playdate.sound.sampleplayer object, with the sound data loaded in memory.
 ---@param path string The path to the audio file.
 ---@return playdate.sound.Sampleplayer? sampleplayer, string? error # The sampleplayer, and an error if it couldn't be loaded.
+---@nodiscard
 function playdate.sound.sampleplayer.new(path) end
 
 ---Returns a new playdate.sound.sampleplayer object for playing the given sample.
 ---@param sample playdate.sound.Sample The sample to use for making the sampleplayer.
 ---@return playdate.sound.Sampleplayer? sampleplayer, string? error # The sampleplayer, and an error if it couldn't be loaded.
+---@nodiscard
 function playdate.sound.sampleplayer.new(sample) end
 
 ---@class playdate.sound.Sampleplayer
@@ -26,6 +29,7 @@ local Sampleplayer = {}
 
 ---Returns a new playdate.sound.sampleplayer with the same sample, volume, and rate as the given sampleplayer.
 ---@return playdate.sound.Sampleplayer
+---@nodiscard
 function Sampleplayer:copy() end
 
 ---Starts playing the sample.
@@ -52,6 +56,7 @@ function Sampleplayer:setVolume(left, right) end
 
 ---Returns the playback volume for the sampleplayer.
 ---@return number left, number? right # A single value for mono sources, and a pair of values for stereo sources.
+---@nodiscard
 function Sampleplayer:getVolume() end
 
 ---`playdate.sound.sample` is an abstraction of an individual sound sample. If all you want to do is play a single sound sample, you may wish to use `playdate.sound.sampleplayer` instead. However, playdate.sound.sample exists so you can preload sounds and swap them in and out without fragmenting device memory.
