@@ -37,4 +37,3 @@ function table.shallowcopy(source, destination) end
 ---@return table copy
 ---@nodiscard
 function table.deepcopy(source) end
-

@@ -1,9 +1,16 @@
 ---@meta
 
----The Playdate runtime uses `import` instead of the standard Lua `require` function, and it behaves a little differently: All files imported from main.lua (and imported from files imported from main.lua, and so on) are compiled into a single pdz file, and `import` runs the code from the file only once. A second `import` call from **anywhere** in the pdz will do nothing.
+---The Playdate runtime uses `import` instead of the standard Lua `require` function, and it behaves a little differently:
+---All files imported from main.lua (and imported from files imported from main.lua, and so on) are compiled into
+---a single pdz file, and `import` runs the code from the file only once.
+---A second `import` call from **anywhere** in the pdz will do nothing.
 ---@param moduleName string
----@return any
+---@return unknown
 function import(moduleName) end
+
+---This function does not exist in the Playdate's API.
+---@deprecated
+function require(modname) end
 
 ---This function does not exist in the Playdate's API.
 ---@deprecated
@@ -42,6 +49,7 @@ local Class = {}
 ---> **Warning**:
 ---> Only extend `playdate.Class` if you're making a class using `class`.
 ---
+---@see class
 ---@type fun(self: playdate.Class, ...)
 Class.init = nil
 
@@ -52,7 +60,7 @@ Class.init = nil
 ---> Only create classes through this function.
 ---> Extend `playdate.Class` or any other class
 ---> that extends that class after you're done to have all its methods.
----> For example, to set the type a new class:
+---> For example, to set the type of a new class:
 ---> ```lua
 ---> ---@class ClassName : playdate.Class
 ---> ClassName = {}

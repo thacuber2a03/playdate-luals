@@ -166,10 +166,10 @@ function Image:draw(p, flip, sourceRect) end
 ---@class playdate.graphics.Tilemap
 local Tilemap = {}
 
----Creates a new blank image of the given width and height. The image can be drawn on using `playdate.graphics.pushContext()` or `playdate.graphics.lockFocus()`. The optional bgcolor argument is one of the color constants as used in playdate.graphics.setColor()`, defaulting to `kColorClear`.
+---Creates a new blank image of the given width and height. The image can be drawn on using `playdate.graphics.pushContext()` or `playdate.graphics.lockFocus()`.
 ---@param width number
 ---@param height number
----@param bgColor playdate.graphics.Color?
+---@param bgColor playdate.graphics.Color? One of the color constants as used in `playdate.graphics.setColor()`, defaulting to `kColorClear`.
 ---@return playdate.graphics.Image
 ---@see playdate.graphics.setColor
 ---@nodiscard
