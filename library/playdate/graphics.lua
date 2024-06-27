@@ -356,7 +356,7 @@ playdate.graphics.sprite = {}
 ---
 ---@see playdate.graphics.image
 ---@see class
----@class playdate.graphics.Sprite
+---@class playdate.graphics.Sprite : playdate.Class
 local Sprite = {}
 
 ---This class method (note the "." syntax rather than ":") returns a new sprite object.

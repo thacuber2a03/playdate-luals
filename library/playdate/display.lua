@@ -1,6 +1,7 @@
 ---@meta
 
----The `playdate.display` module contains functions pertaining to Playdate’s screen. Functions related to drawing can be found in `playdate.graphics`.
+---The `playdate.display` module contains functions pertaining to Playdate’s screen.
+---Functions related to drawing can be found in `playdate.graphics`.
 ---@see playdate.graphics
 playdate.display = {}
 
@@ -8,14 +9,14 @@ playdate.display = {}
 ---
 ---If `rate` is 0, `playdate.update()` is called as soon as possible. Since the display refreshes line-by-line, and unchanged lines aren’t sent to the display, the update cycle will be faster than 30 times a second but at an indeterminate rate. `playdate.getCurrentTimeMilliseconds()` should then be used as a steady time base.
 ---
----> Equivalent to playdate->display->setRefreshRate() in the C API.
+---> **Equivalent to `playdate->display->setRefreshRate()` in the C API.**
 ---
 ---@param rate number
 function playdate.display.setRefreshRate(rate) end
 
 ---Returns the width of the Playdate display, taking the current display scale into account; e.g., if the scale is 2, the values returned will be based off of a 200 x 120-pixel screen rather than the native 400 x 240. (See `playdate.display.setScale()`.)
 ---
----> Equivalent to `playdate->display->getWidth()` in the C API.
+---> **Equivalent to `playdate->display->getWidth()` in the C API.
 ---
 ---@return number width
 ---@see playdate.display.setScale
@@ -24,7 +25,7 @@ function playdate.display.getWidth() end
 
 ---Returns the height of the Playdate display, taking the current display scale into account; e.g., if the scale is 2, the values returned will be based off of a 200 x 120-pixel screen rather than the native 400 x 240. (See `playdate.display.setScale()`.)
 ---
----> Equivalent to `playdate->display->getHeight()` in the C API.
+---> **Equivalent to `playdate->display->getHeight()` in the C API.**
 ---
 ---@return number height
 ---@see playdate.display.setScale
@@ -35,7 +36,7 @@ function playdate.display.getHeight() end
 ---
 ---The top-left corner of the frame buffer is scaled up to fill the display; e.g., if the scale is set to 4, the pixels in rectangle [0,100] x [0,60] are drawn on the screen as 4 x 4 squares.
 ---
----> Equivalent to playdate->display->setScale() in the C API.
+---> **Equivalent to `playdate->display->setScale()` in the C API.**
 ---
 ---@param scale 1 | 2 | 4 | 8
 function playdate.display.setScale(scale) end
