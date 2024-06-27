@@ -1,14 +1,12 @@
 ---@meta
 
----@enum playdate.Button
-local Button = {
-    kButtonA = "a",
-    kButtonB = "b",
-    kButtonUp = "up",
-    kButtonDown = "down",
-    kButtonLeft = "left",
-    kButtonRight = "right",
-}
+---@alias playdate.Button
+---| '"a"'
+---| '"b"'
+---| '"up"'
+---| '"down"'
+---| '"left"'
+---| '"right"'
 
 ---Version 2.5.0.
 ---
@@ -20,7 +18,7 @@ local Button = {
 ---@field public kButtonDown  playdate.Button
 ---@field public kButtonLeft  playdate.Button
 ---@field public kButtonRight playdate.Button
----@field public isSimulator boolean This variable—not a function, so don’t invoke with ()—it is set to 1 when running inside of the Simulator and is `nil` otherwise.
+---@field public isSimulator number? This variable—not a function, so don’t invoke with ()—it is set to 1 when running inside of the Simulator and is `nil` otherwise.
 playdate = {}
 
 ---Returns two values, the current API version of the Playdate runtime and the minimum API version supported by the runtime.
