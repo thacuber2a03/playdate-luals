@@ -302,7 +302,6 @@ function playdate.graphics.unlockFocus() end
 ---
 ---@see playdate.graphics.image
 ---@see class
----@class _playdate.graphics.sprite : playdate.Class
 playdate.graphics.sprite = {}
 
 ---Sprites are graphic objects that can be used to represent moving entities in your games, like the player, or the enemies that chase after your player. Sprites animate efficiently, and offer collision detection and a host of other built-in functionality. (If you want to create an environment for your sprites to move around in, consider using tilemaps or drawing a background image.)
@@ -519,3 +518,135 @@ function Sprite:draw(x, y, width, height) end
 
 ---Marks the rect defined by the sprite’s current bounds as needing a redraw.
 function Sprite:markDirty() end
+
+---Animation utilities.
+playdate.graphics.animation = {}
+
+---`playdate.graphics.animation.loop` helps keep track of animation frames, especially for frames in an `playdate.graphics.imagetable`. For a more general timer see `playdate.timer` or `playdate.frameTimer`.
+---
+---> **Warning**:
+---> You must import `CoreLibs/animation` to use these functions.
+---
+---@see playdate.graphics.Imagetable
+---@see playdate.Timer
+---@see playdate.FrameTimer
+playdate.graphics.animation.loop = {}
+
+----@class playdate.graphics.AnimationLoop
+local AnimationLoop = {}
+
+---Animators are lightweight objects that keep track of animation progress. They can animate between two numbers, two points, along a line segment, arc, or polygon, or along a compound path made up of all three.
+---
+---Usage is simple: create a new Animator, query for its current value when you need to update your animation, and optionally call `animator:ended()` to see if the animation is complete.
+---
+---> **Info**: Example code at `<Playdate SDK>/Examples/Single File Examples/animator.lua`.
+---
+---> **Warning**: You must import `CoreLibs/animator` to use these functions.
+---
+playdate.graphics.animator = {}
+
+---Animators are lightweight objects that keep track of animation progress. They can animate between two numbers, two points, along a line segment, arc, or polygon, or along a compound path made up of all three.
+---
+---Usage is simple: create a new Animator, query for its current value when you need to update your animation, and optionally call `animator:ended()` to see if the animation is complete.
+---
+---> **Info**: Example code at `<Playdate SDK>/Examples/Single File Examples/animator.lua`.
+---
+---> **Warning**: You must import `CoreLibs/animator` to use these functions.
+---
+---@see playdate.graphics.Animator.ended
+---@class playdate.graphics.Animator
+local Animator = {}
+
+---Animates between two number or `playdate.geometry.point` values.
+---
+---`duration` is the total time of the animation in milliseconds.
+---
+---`startValue` and `endValue` should be either numbers or `playdate.geometry.point`s.
+---
+---`easingFunction`, if supplied, should be a value from `playdate.easingFunctions`. If your easing function requires additional variables `s`, `a`, or `p`, set them on the animator directly after creation. For example:
+---
+---```lua
+---local a = playdate.graphics.animator.new(1000, 0, 100, playdate.easingFunctions.inBack)
+---a.s = 1.9
+---```
+---
+---`startTimeOffset`, if supplied, will shift the start time of the animation by the specified number of milliseconds. (If positive, the animation will be delayed. If negative, the animation will effectively have started before the moment the animator is instantiated.)
+---
+---#### Example: Using an animator to animate movement
+---
+---```lua
+----- You can copy and paste this example directly as your main.lua file to see it in action
+---import "CoreLibs/graphics"
+---import "CoreLibs/animator"
+---
+----- We'll be demonstrating how to use an animator to animate a square moving across the screen
+---local square = playdate.graphics.image.new(20, 20, playdate.graphics.kColorBlack)
+---
+----- 1000ms, or 1 second
+---local animationDuration = 1000
+----- We're animating from the left to the right of the screen
+---local startX, endX = -20, 400
+----- Setting an easing function to get a nice, smooth movement
+---local easingFunction = playdate.easingFunctions.inOutCubic
+---local animator = playdate.graphics.animator.new(animationDuration, startX, endX, easingFunction)
+---animator.repeatCount = -1 -- Make animator repeat forever
+---
+---function playdate.update()
+---    -- Clear the screen
+---    playdate.graphics.clear()
+---
+---    -- By using :currentValue() as the x value, the square follows along with the animation
+---    square:draw(animator:currentValue(), 120)
+---end
+---```
+---
+---@see playdate.geometry.Point
+---@see playdate.easingFunctions
+function playdate.graphics.animator.new(duration, startValue, endValue, easingFunction, startTimeOffset) end
+
+---Creates a new Animator that will animate along the provided `playdate.geometry.lineSegment`.
+---
+---#### Example: Using an animator to animate along a line
+---
+---```lua
+----- You can copy and paste this example directly as your main.lua file to see it in action
+---import "CoreLibs/graphics"
+---import "CoreLibs/animator"
+---
+----- We'll be demonstrating how to use an animator to animate a square moving across the screen
+---local square = playdate.graphics.image.new(20, 20, playdate.graphics.kColorBlack)
+---
+----- 1000ms, or 1 second
+---local animationDuration = 1000
+----- We're animating from the top left to the bottom right of the screen
+---local line = playdate.geometry.lineSegment.new(0, 0, 400, 240)
+---local animator = playdate.graphics.animator.new(animationDuration, line)
+---
+---function playdate.update()
+---    -- Clear the screen
+---    playdate.graphics.clear()
+---
+---    -- We can use :currentValue() directly, as it returns a point
+---    square:draw(animator:currentValue())
+---end
+---```
+---
+---@param duration number Duration of the animation, in milliseconds
+---@param lineSegment playdate.geometry.LineSegment
+---@param easingFunction playdate.EasingFunction? Defaults to `playdate.easingFunctions.linear`.
+---@param startTimeOffset number Shifts the start time of the animation by the specified number of milliseconds. (If positive, the animation will be delayed. If negative, the animation will effectively have started before the moment the animator is instantiated.)
+---@return playdate.graphics.Animator animator
+---@see playdate.graphics.animator.new
+function playdate.graphics.animator.new(duration, lineSegment, easingFunction, startTimeOffset) end
+
+---Returns true if the animation is completed. Only returns true if this function or `currentValue()` has been called since the animation ended in order to allow animations to fully finish before true is returned.
+---
+---@return boolean ended
+---@see playdate.graphics.Animator.currentValue
+---@nodiscard
+function Animator:ended() end
+
+---Returns the current value of the animation, which will be either a number or a `playdate.geometry.point`, depending on the type of animator.
+---@return number | playdate.geometry.Point currentValue
+---@see playdate.geometry.Point
+function Animator:currentValue() end

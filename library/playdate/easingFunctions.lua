@@ -20,9 +20,9 @@ playdate.easingFunctions = {}
 ---> **Info**:
 ---> [This page](https://easings.net) does a great job illustrating the shape of each easing function. (A mouseover will show an animation.) 
 ---
----@see playdate.graphics.animator
----@see playdate.timer
----@see playdate.frameTimer
+---@see playdate.graphics.Animator
+---@see playdate.Timer
+---@see playdate.FrameTimer
 ---@alias playdate.EasingFunctionWithAmplitudeAndPeriod fun(t: number, b: number, c: number, d: number, a: number, p: number): number
 ---@alias playdate.EasingFunctionWithOvershoot fun(t: number, b: number, c: number, d: number, s: number): number
 ---@alias playdate.NormalEasingFunction fun(t: number, b: number, c: number, d: number): number
