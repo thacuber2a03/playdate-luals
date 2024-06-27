@@ -50,7 +50,9 @@ all the settings in the [config.json](config.json) file:
 
     "Lua.workspace.library": [
         "$PLAYDATE_SDK_PATH/CoreLibs"
-    ]
+    ],
+
+	"Lua.hover.expandAlias": false
 }
 ```
 

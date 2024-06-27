@@ -25,6 +25,8 @@
 
 		"Lua.workspace.library": [
 			"$PLAYDATE_SDK_PATH/CoreLibs"
-		]
+		],
+
+		"Lua.hover.expandAlias": false
 	}
 }
