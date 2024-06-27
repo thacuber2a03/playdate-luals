@@ -46,7 +46,11 @@ all the settings in the [config.json](config.json) file:
         "io": "disable",
         "os": "disable",
         "package": "disable"
-    }
+    },
+
+    "Lua.workspace.library": [
+        "$PLAYDATE_SDK_PATH/CoreLibs"
+    ]
 }
 ```
 

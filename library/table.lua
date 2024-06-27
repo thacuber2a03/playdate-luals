@@ -28,7 +28,7 @@ function table.create(arrayCount, hashCount) end
 ---`shallowcopy` returns a shallow copy of the `source` table. If a `destination` table is provided, it copies the contents of `source` into `destination` and returns `destination`. The copy will contain references to any nested tables.
 ---@param source table
 ---@param destination table?
----@return table copy `destination` if it exists, otherwise a new table
+---@return table copy `destination` if it exists, otherwise a new table.
 ---@nodiscard
 function table.shallowcopy(source, destination) end
 
@@ -37,3 +37,4 @@ function table.shallowcopy(source, destination) end
 ---@return table copy
 ---@nodiscard
 function table.deepcopy(source) end
+
